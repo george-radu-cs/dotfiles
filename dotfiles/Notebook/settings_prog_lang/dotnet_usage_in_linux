@@ -1,0 +1,9 @@
+`dotnet new sln -n "nameSolution"`
+
+`dotnet new console -n "nameProj"`
+
+`dotnet new classlib -n "nameLibrary"`
+
+`dotnet sln nameSolution.sln add **/*.csproj`
+
+`dotnet add nameProj/nameProj.csproj reference nameLibrary/nameLibrary.csproj`
