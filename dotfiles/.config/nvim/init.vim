@@ -44,7 +44,9 @@ set signcolumn=yes
 set colorcolumn=80
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
-call plug#begin('~/.vim/plugged')
+call plug#begin()
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " github copilot
 Plug 'github/copilot.vim'
@@ -59,7 +61,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'vuciv/vim-bujo'
 Plug 'tpope/vim-dispatch'
 Plug 'vim-syntastic/syntastic'
-Plug 'honza/vim-snippets'
 Plug 'puremourning/vimspector'
 " rust
 Plug 'rust-lang/rust.vim'
