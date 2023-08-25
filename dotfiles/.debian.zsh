@@ -1,3 +1,6 @@
+# linuxbrew
+[ -d /home/linuxbrew/.linuxbrew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
 # android
 export ANDROID_HOME=$HOME/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator

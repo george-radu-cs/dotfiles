@@ -19,10 +19,6 @@ if command -v systemctl > /dev/null; then
   source "${HOME}/.systemd.zsh"
 fi
 
-if command -v brew > /dev/null; then
-  source "${HOME}/.brew.zsh"
-fi
-
 if command -v kubectl > /dev/null; then
   source "${HOME}/.kubectl.zsh"
 fi

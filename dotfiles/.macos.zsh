@@ -1,3 +1,7 @@
+# homebrew
+export PATH=$PATH:/opt/homebrew/bin
+export PATH=$PATH:/opt/homebrew/sbin
+
 # android
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
