@@ -92,6 +92,16 @@ local plugins = {
     end,
   },
   {
+    "zbirenbaum/copilot.lua",
+    lazy = false,
+    opts = function()
+      return require "custom.configs.copilot"
+    end,
+    config = function(_, opts)
+      require("copilot").setup(opts)
+    end,
+  },
+  {
     "hrsh7th/nvim-cmp",
     opts = function()
       local M = require "plugins.configs.cmp"
@@ -100,6 +110,13 @@ local plugins = {
         behavior = cmp.ConfirmBehavior.Insert,
         select = false,
       }
+      M.mapping["<C-j>"] = cmp.mapping(function(_fallback)
+        cmp.mapping.abort()
+        require("copilot.suggestion").accept_line()
+      end, {
+        "i",
+        "s",
+      })
       table.insert(M.sources, { name = "crates" })
       return M
     end,
