@@ -11,8 +11,8 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
 # go
+export GOPATH="${HOME}/go"
 export PATH=$PATH:${HOME}/go/bin/
-export GOPATH="${HOME}/go/bin/"
 
 # flutter
 export PATH=$PATH:${HOME}/development/flutter/bin
