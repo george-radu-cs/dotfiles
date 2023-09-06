@@ -7,8 +7,9 @@ done
 echo "Files copied"
 echo ""
 
-pip3 install neovim
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo "Installed vim plug"
+if [[ $(uname) == "Darwin" ]]; then
+  brew install neovim
+elif command -v apt > /dev/null; then
+  sudo apt-install neovim
+fi
 echo ""
