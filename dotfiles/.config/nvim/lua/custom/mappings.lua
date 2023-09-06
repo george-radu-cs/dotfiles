@@ -4,6 +4,24 @@ local M = {}
 M.general = {
   n = {
     [";"] = { ":", "enter command mode", opts = { nowait = true } },
+    ["ff"] = { "[[ Telescope find_files hidden=true]], opt" },
+
+    -- keep cursor position in the middle when scrolling down and up in file
+    ["<C-d>"] = { "<C-d>zz" },
+    ["<C-u>"] = { "<C-u>zz" },
+
+    -- allow search term to stay in the middle
+    ["n"] = { "nzz" },
+    ["N"] = { "Nzz" },
+
+    -- paste without losing the current register
+    ["<leader>p"] = { '"_dP' },
+  },
+
+  v = {
+    -- move lines up and down in visual mode
+    ["J"] = { ":m '>+1<CR>gv=gv" },
+    ["K"] = { ":m '<-2<CR>gv=gv" },
   },
 }
 

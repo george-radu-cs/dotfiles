@@ -229,6 +229,12 @@ local default_plugins = {
 
   {
     "nvim-telescope/telescope.nvim",
+    requires = {
+      { "nvim-lua/popup.nvim" },
+      { "nvim-lua/plenary.nvim" },
+      { "kyazdani42/nvim-web-devicons" },
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    },
     dependencies = "nvim-treesitter/nvim-treesitter",
     cmd = "Telescope",
     init = function()

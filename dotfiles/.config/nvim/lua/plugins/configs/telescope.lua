@@ -9,6 +9,9 @@ local options = {
       "--line-number",
       "--column",
       "--smart-case",
+      "--hidden",
+      "-g",
+      "!.git",
     },
     prompt_prefix = "   ",
     selection_caret = "  ",
@@ -46,6 +49,25 @@ local options = {
     buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
     mappings = {
       n = { ["q"] = require("telescope.actions").close },
+    },
+  },
+  pickers = {
+    find_files = {
+      find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
+    },
+    buffers = {
+      show_all_buffers = true,
+    },
+    git_status = {
+      git_icons = {
+        added = " ",
+        changed = " ",
+        copied = " ",
+        deleted = " ",
+        renamed = "➡",
+        unmerged = " ",
+        untracked = " ",
+      },
     },
   },
 
