@@ -13,8 +13,16 @@ local theme_dir = state_home .. "/dotfiles/theme"
 
 -- Theme ------------------------------------------------------------------------
 
--- Kanagawa palettes (from rebelot/kanagawa.nvim extras).
+-- Gruvbox light hard (morhetz/gruvbox palette) and Kanagawa (rebelot/kanagawa.nvim extras).
 config.color_schemes = {
+  ["Gruvbox Light Hard"] = {
+    foreground = "#3c3836", background = "#f9f5d7",
+    cursor_bg = "#3c3836", cursor_fg = "#f9f5d7", cursor_border = "#3c3836",
+    selection_fg = "#3c3836", selection_bg = "#d5c4a1",
+    scrollbar_thumb = "#d5c4a1", split = "#d5c4a1",
+    ansi = { "#fbf1c7", "#cc241d", "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#7c6f64" },
+    brights = { "#928374", "#9d0006", "#79740e", "#b57614", "#076678", "#8f3f71", "#427b58", "#3c3836" },
+  },
   ["Kanagawa Wave"] = {
     foreground = "#dcd7ba", background = "#1f1f28",
     cursor_bg = "#c8c093", cursor_fg = "#1f1f28", cursor_border = "#c8c093",

@@ -19,7 +19,7 @@ directly.
 | Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython · official [rustup](https://rustup.rs) · Go, TypeScript, Lua · C/C++ (clang, CMake, Ninja) |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, lazygit, yazi, gh, btop, fastfetch |
-| Theme | Gruvbox dark (hard) by default; Kanagawa wave, dragon and lotus |
+| Theme | Gruvbox dark (hard) by default; Gruvbox light (hard); Kanagawa wave, dragon and lotus |
 
 ## Requirements
 
