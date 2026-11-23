@@ -35,9 +35,10 @@ directly.
 git clone https://github.com/george-radu-cs/dotfiles.git ~/Personal/dotfiles
 cd ~/Personal/dotfiles
 
-./bootstrap.sh -n          # preview every action without changing anything
-./bootstrap.sh --backup    # optional: snapshot the current configuration
-./bootstrap.sh             # install and configure everything
+./bootstrap.sh                # show the available commands
+./bootstrap.sh install -n     # preview every action without changing anything
+./bootstrap.sh backup         # optional: snapshot the current configuration
+./bootstrap.sh install        # install and configure everything
 ```
 
 Open a new terminal (or run `exec zsh`) when it finishes. On Linux, log out
@@ -48,8 +49,8 @@ Line Tools. Accept, then run the clone again.
 
 ### What the bootstrap does
 
-The bootstrap runs six steps in order. Each step can also be run on its own,
-for example `./bootstrap.sh link`, and every step is safe to re-run.
+`./bootstrap.sh install` runs six steps in order. Each step can also be run on
+its own, for example `./bootstrap.sh link`, and every step is safe to re-run.
 
 | Step | macOS | Linux |
 | --- | --- | --- |
@@ -93,12 +94,12 @@ Nothing is deleted by the bootstrap. Files it replaces are moved to
 change.
 
 ```sh
-./bootstrap.sh --backup             # copy the current configuration and shell history
-./bootstrap.sh --clean              # move leftovers of a previous setup into a backup
-./bootstrap.sh --backups            # list restorable backups
-./bootstrap.sh --restore [name]     # undo the newest (or the named) backup
-./bootstrap.sh --check              # report missing or broken links
-./bootstrap.sh --unlink             # remove all links created by this repository
+./bootstrap.sh backup               # copy the current configuration and shell history
+./bootstrap.sh clean                # move leftovers of a previous setup into a backup
+./bootstrap.sh backups              # list restorable backups
+./bootstrap.sh restore [name]       # undo the newest (or the named) backup
+./bootstrap.sh check                # report missing or broken links
+./bootstrap.sh unlink               # remove all links created by this repository
 ```
 
 ## Repository layout

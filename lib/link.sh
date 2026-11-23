@@ -3,7 +3,7 @@
 #
 # Each directory in home/ is a stow package that mirrors $HOME. Anything already
 # sitting where a link should go is moved to $BACKUP_DIR first, never deleted.
-# Every move/creation is recorded in $BACKUP_DIR/.manifest so --restore can undo it.
+# Every move/creation is recorded in $BACKUP_DIR/.manifest so `restore` can undo it.
 
 # One folder per run; a suffix keeps two runs in the same second apart.
 if [[ -z ${BACKUP_DIR:-} ]]; then
@@ -23,7 +23,7 @@ LEGACY_FILES=(
   .systemd.zsh .kubectl.zsh .freebsd.zsh .fzf.zsh
 )
 
-# Leftovers of the old setup that nothing uses anymore (`--clean`). Globs, relative
+# Leftovers of the old setup that nothing uses anymore (`clean`). Globs, relative
 # to $HOME. They are moved to a backup folder like everything else, not deleted.
 CLEAN_PATHS=(
   '.zcompdump*' .p10k.zsh.bak .save_p10k.zsh .zprofile.bak .zprofile.pysave
@@ -228,7 +228,7 @@ backup_config() {
   ok "backed up $count paths → $(tilde "$BACKUP_DIR")"
 }
 
-# Undo `link` / `--clean`, or go back to a `--backup` snapshot: remove the links,
+# Undo `link` / `clean`, or go back to a `backup` snapshot: remove the links,
 # delete files bootstrap created, and put back everything in the manifest.
 # Whatever is in the way is itself backed up first, so a restore can be undone.
 restore_backup() {
@@ -269,12 +269,12 @@ restore_backup() {
     esac
   done < <(awk '{ l[NR] = $0 } END { for (i = NR; i > 0; i--) print l[i] }' "$dir/.manifest")
 
-  # Snapshots (--backup) stay restorable; moved-out backups are now empty.
+  # Snapshots (`backup`) stay restorable; moved-out backups are now empty.
   if [[ $DRY_RUN != 1 ]] && ! grep -q '^copied' "$dir/.manifest"; then
     mv "$dir/.manifest" "$dir/.manifest.restored"
   fi
   ok "restore complete (backup folder kept: $(tilde "$dir"))"
-  [[ -f $BACKUP_DIR/.manifest ]] && info "what was replaced is in $(tilde "$BACKUP_DIR") (--restore undoes this)"
+  [[ -f $BACKUP_DIR/.manifest ]] && info "what was replaced is in $(tilde "$BACKUP_DIR") (./bootstrap.sh restore undoes this)"
   return 0
 }
 
