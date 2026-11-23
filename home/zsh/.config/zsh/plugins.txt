@@ -1,0 +1,12 @@
+# Loaded before compinit. See conf.d/20-plugins.zsh.
+
+# extra completion definitions (fpath only)
+zsh-users/zsh-completions kind:fpath path:src
+
+# selected oh-my-zsh plugins, without the framework
+ohmyzsh/ohmyzsh path:lib/git.zsh
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/sudo
+
+# vi mode (ZVM_* settings are in conf.d/20-plugins.zsh)
+jeffreytse/zsh-vi-mode

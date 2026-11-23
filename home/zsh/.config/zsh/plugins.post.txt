@@ -1,0 +1,9 @@
+# Loaded after compinit. Order matters: fzf-tab before the widget-wrapping
+# plugins, syntax highlighting last.
+
+Aloxaf/fzf-tab
+ohmyzsh/ohmyzsh path:plugins/aws conditional:_has_aws   # only where the aws CLI exists
+ohmyzsh/ohmyzsh path:plugins/kubectl
+ohmyzsh/ohmyzsh path:plugins/rust
+zsh-users/zsh-autosuggestions
+zdharma-continuum/fast-syntax-highlighting
