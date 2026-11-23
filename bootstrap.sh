@@ -51,6 +51,34 @@ EOF
 }
 
 ALL_STEPS=(packages link toolchains docker fonts shell)
+COMMANDS=(install "${ALL_STEPS[@]}" backup clean backups restore check unlink help)
+
+# Closest command name (edit distance ≤ 2, or a prefix), for "did you mean".
+suggest() {
+  printf '%s\n' "${COMMANDS[@]}" | awk -v w="$1" '
+    function lev(a, b,   i, j, la, lb, d, c) {
+      la = length(a); lb = length(b)
+      for (i = 0; i <= la; i++) d[i, 0] = i
+      for (j = 0; j <= lb; j++) d[0, j] = j
+      for (i = 1; i <= la; i++) for (j = 1; j <= lb; j++) {
+        c = substr(a, i, 1) != substr(b, j, 1)
+        d[i, j] = d[i - 1, j] + 1
+        if (d[i, j - 1] + 1 < d[i, j]) d[i, j] = d[i, j - 1] + 1
+        if (d[i - 1, j - 1] + c < d[i, j]) d[i, j] = d[i - 1, j - 1] + c
+      }
+      return d[la, lb]
+    }
+    { s = lev(w, $0); if (best == "" || s < bs) { best = $0; bs = s } }
+    END { if (bs <= 2 || index(best, w) == 1) print best }'
+}
+
+# Wrong command or option: short message on stderr, exit 2 (usage error).
+usage_error() {
+  printf '%s✗ %s%s\n' "$_c_red" "$1" "$_c_reset" >&2
+  [[ -n ${2:-} ]] && printf "  Did you mean '%s'?\n" "$2" >&2
+  printf '  Run ./bootstrap.sh --help to see all commands.\n' >&2
+  exit 2
+}
 STEPS=()
 MODE=""
 while [[ $# -gt 0 ]]; do
@@ -68,7 +96,8 @@ while [[ $# -gt 0 ]]; do
     -y|--yes)                    ASSUME_YES=1 ;;   # accepted for compatibility; nothing prompts
     --extra)                     WITH_EXTRA=1 ;;
     -h|--help|help)              usage; exit 0 ;;
-    *) usage >&2; die "unknown command or option: $1" ;;
+    -*) usage_error "unknown option '$1'" ;;
+    *)  usage_error "unknown command '$1'" "$(suggest "$1")" ;;
   esac
   shift
 done
