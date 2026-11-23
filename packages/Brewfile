@@ -33,6 +33,8 @@ brew "fastfetch"
 brew "tree"
 brew "tree-sitter-cli"   # nvim-treesitter compiles parsers with it
 brew "luarocks"          # some LazyVim plugins build rocks
+brew "shellcheck"        # lint shell scripts (bootstrap, lib/)
+brew "stylua"            # format Lua (nvim config)
 
 # --- languages -----------------------------------------------------------------
 # java/node/bun/python come from mise (home/mise/.config/mise/config.toml).
