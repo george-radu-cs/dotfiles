@@ -1,0 +1,6 @@
+# markdownlint (used by Neovim/LazyVim and markdownlint-cli2)
+# Keep prose at 80 columns; tables and code blocks cannot be wrapped.
+MD013:
+  line_length: 80
+  tables: false
+  code_blocks: false
