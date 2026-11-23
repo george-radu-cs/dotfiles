@@ -39,7 +39,7 @@ ${_c_bold}Backups:${_c_reset}
 ${_c_bold}Options:${_c_reset}
   -n, --dry-run  print what would happen, change nothing
       --extra    with packages/install on macOS: also install Brewfile.extra
-  -h, --help     show this help
+  -h, --help     show this help; with a command, help for that command
 
 ${_c_bold}Examples:${_c_reset}
   ./bootstrap.sh install -n      preview a full install
@@ -47,6 +47,7 @@ ${_c_bold}Examples:${_c_reset}
   ./bootstrap.sh install         set everything up
   ./bootstrap.sh link            re-link after adding a config
   ./bootstrap.sh restore         undo the last change
+  ./bootstrap.sh help restore    details for one command
 EOF
 }
 
@@ -72,6 +73,63 @@ suggest() {
     END { if (bs <= 2 || index(best, w) == 1) print best }'
 }
 
+# Detailed help for one command: ./bootstrap.sh help <command> or <command> --help
+command_help() {
+  local cmd=$1 text
+  case $cmd in
+    install) text="Run every setup step in order: packages, link, toolchains, docker, fonts, shell.
+Use it on a new machine, or again later to bring a machine back in line with the
+repo. Steps that have nothing to do finish immediately.
+
+  ./bootstrap.sh install -n        preview, change nothing
+  ./bootstrap.sh install --extra   also install packages/Brewfile.extra (macOS)" ;;
+    packages) text="Install system packages. Installed packages are never upgraded.
+
+  macOS   Xcode Command Line Tools, Homebrew, packages/Brewfile
+          (--extra adds packages/Brewfile.extra)
+  Linux   packages/arch.txt, fedora.txt or debian.txt, the WezTerm repository,
+          and mise" ;;
+    link) text="Symlink every package in home/ into \$HOME with GNU Stow.
+
+Anything already in the way is moved to ~/.dotfiles-backup/<date>/ (undo with
+'restore'). An existing ~/.gitconfig is also copied to the untracked
+~/.config/git/config.local so machine-specific git settings survive." ;;
+    toolchains) text="Install language toolchains, only what is missing.
+
+  mise     tools in ~/.config/mise/config.toml (Java, Node, Bun, Python, uv,
+           IPython) and, on Linux, config.linux.toml (Go, TypeScript, CLI tools)
+  rustup   official installer, stable toolchain, clippy, rustfmt, rust-analyzer" ;;
+    docker) text="  macOS   checks that Docker Desktop is installed (it comes from the Brewfile)
+  Linux   adds Docker's repository (Fedora, Debian), installs the engine with
+          Compose and Buildx, writes /etc/docker/daemon.json, enables the
+          service and adds you to the docker group (log out and in afterwards)" ;;
+    fonts) text="  macOS   nothing to do: the Brewfile installs JetBrainsMono Nerd Font
+  Linux   downloads a pinned JetBrainsMono Nerd Font release into
+          ~/.local/share/fonts and refreshes the font cache" ;;
+    shell) text="Finish the shell setup: make zsh the login shell, carry ~/.zsh_history over
+to ~/.local/state/zsh/history, install antidote and the tmux plugins, restore
+Neovim plugins from lazy-lock.json, and apply the default theme if none is set." ;;
+    backup) text="Copy everything this repo manages (plus shell history) to
+~/.dotfiles-backup/<date>/. Nothing is changed. Linked files are stored with
+their real contents. Bring a snapshot back with: ./bootstrap.sh restore <name>" ;;
+    clean) text="Move leftovers of an old setup (zinit, ~/.tmux, p10k caches, .zcompdump files,
+nvim.bak, neofetch config) into ~/.dotfiles-backup/<date>/. Undo with 'restore'." ;;
+    backups) text="List the backups in ~/.dotfiles-backup that 'restore' can bring back." ;;
+    restore) text="Undo the newest backup, or the one named: ./bootstrap.sh restore <name>
+
+Removes this repo's links, deletes files the bootstrap created, and moves the
+backed-up files back. Whatever is in the way is backed up first, so a restore
+can itself be undone. List backups with: ./bootstrap.sh backups" ;;
+    check) text="Report every file from home/ that is not linked into \$HOME, or links elsewhere.
+Exits with 1 if something is missing." ;;
+    unlink) text="Remove every symlink this repo created. Backups are not touched; use 'restore'
+to bring old files back." ;;
+    help) text="Show the overview, or detailed help for one command: ./bootstrap.sh help <command>" ;;
+    *) usage_error "unknown command '$cmd'" "$(suggest "$cmd")" ;;
+  esac
+  printf '%s./bootstrap.sh %s%s\n\n%s\n' "$_c_bold" "$cmd" "$_c_reset" "$text"
+}
+
 # Wrong command or option: short message on stderr, exit 2 (usage error).
 usage_error() {
   printf '%s✗ %s%s\n' "$_c_red" "$1" "$_c_reset" >&2
@@ -81,7 +139,13 @@ usage_error() {
 }
 STEPS=()
 MODE=""
+CMD=""          # first command word, for `<command> --help`
+WANT_HELP=0
 while [[ $# -gt 0 ]]; do
+  case $1 in
+    install|packages|link|toolchains|docker|fonts|shell|check|unlink|clean|backup|backups|restore)
+      [[ -z $CMD ]] && CMD=$1 ;;
+  esac
   case $1 in
     install)                     MODE="install" ;;
     packages|link|toolchains|docker|fonts|shell) MODE=install; STEPS+=("$1") ;;
@@ -95,12 +159,17 @@ while [[ $# -gt 0 ]]; do
     -n|--dry-run)                DRY_RUN=1 ;;
     -y|--yes)                    ASSUME_YES=1 ;;   # accepted for compatibility; nothing prompts
     --extra)                     WITH_EXTRA=1 ;;
-    -h|--help|help)              usage; exit 0 ;;
+    -h|--help)                   WANT_HELP=1 ;;
+    help)                        if [[ -n ${2:-} && $2 != -* ]]; then command_help "$2"; else usage; fi; exit 0 ;;
     -*) usage_error "unknown option '$1'" ;;
     *)  usage_error "unknown command '$1'" "$(suggest "$1")" ;;
   esac
   shift
 done
+if [[ $WANT_HELP == 1 ]]; then
+  if [[ -n $CMD ]]; then command_help "$CMD"; else usage; fi
+  exit 0
+fi
 [[ -z $MODE ]] && { usage; exit 0; }
 export DRY_RUN ASSUME_YES WITH_EXTRA
 
