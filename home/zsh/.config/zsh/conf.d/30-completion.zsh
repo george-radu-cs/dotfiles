@@ -20,7 +20,7 @@ _cache_completion uv     uv generate-shell-completion zsh
 # compinit with a cached dump: full security check at most once a day.
 autoload -Uz compinit
 _zcompdump=$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
-if [[ -n $_zcompdump(#qN.mh+24) || ! -s $_zcompdump ]]; then
+if [[ -n $_zcompdump(#qN.mh+24) || ! -s $_zcompdump || $ZDOTDIR/completions -nt $_zcompdump ]]; then
   compinit -d "$_zcompdump"
 else
   compinit -C -d "$_zcompdump"

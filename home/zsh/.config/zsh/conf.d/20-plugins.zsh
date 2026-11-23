@@ -13,6 +13,7 @@ _antidote_dir="$XDG_DATA_HOME/antidote"
 export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh/omz"
 mkdir -p "$ZSH_CACHE_DIR/completions" 2>/dev/null
 fpath=(
+  "$ZDOTDIR/completions"              # completions shipped with this repo
   "$ZSH_CACHE_DIR/completions"
   "$XDG_CACHE_HOME/zsh/completions"
   $HOME/.docker/completions(N-/)     # Docker Desktop (macOS)

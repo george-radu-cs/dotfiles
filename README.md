@@ -51,6 +51,8 @@ Line Tools. Accept, then run the clone again.
 
 `./bootstrap.sh install` runs six steps in order. Each step can also be run on
 its own, for example `./bootstrap.sh link`, and every step is safe to re-run.
+`./bootstrap.sh help <command>` explains any command in detail, and zsh
+completes commands and options with Tab.
 
 | Step | macOS | Linux |
 | --- | --- | --- |
