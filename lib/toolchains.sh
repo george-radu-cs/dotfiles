@@ -15,7 +15,9 @@ install_toolchains() {
   export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
   _install_mise_tools
   _install_rust
-  note "$_mise_summary · rust $_rust_version"
+  setup_latex
+  # shellcheck disable=SC2154  # set by setup_latex (lib/latex.sh)
+  note "$_mise_summary · rust $_rust_version · $_latex_summary"
 }
 
 # mise: install only when something is missing; otherwise one summary line.

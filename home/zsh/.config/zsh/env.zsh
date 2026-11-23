@@ -38,6 +38,7 @@ path=(
   $XDG_DATA_HOME/mise/shims       # non-interactive shells; .zshrc activates mise properly
   $HOME/.cargo/bin
   $path
+  /Library/TeX/texbin(N-/)            # MacTeX
   $GOPATH/bin(N-/)
   $HOME/.bun/bin(N-/)
   $HOME/.pub-cache/bin(N-/)
@@ -49,6 +50,9 @@ path=(
   "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"(N-/)
   $XDG_DATA_HOME/JetBrains/Toolbox/scripts(N-/)
 )
+
+# Perl modules installed for latexindent (lib/latex.sh)
+[[ -d $XDG_DATA_HOME/perl5/lib/perl5 ]] && export PERL5LIB="$XDG_DATA_HOME/perl5/lib/perl5${PERL5LIB:+:$PERL5LIB}"
 
 # --- defaults ------------------------------------------------------------------
 export LANG="${LANG:-en_US.UTF-8}"

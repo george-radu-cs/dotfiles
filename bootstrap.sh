@@ -7,7 +7,7 @@ set -euo pipefail
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export DOTFILES
 
-for lib in common link packages toolchains docker fonts shell; do
+for lib in common link packages toolchains latex docker fonts shell; do
   # shellcheck source=/dev/null
   source "$DOTFILES/lib/$lib.sh"
 done
@@ -22,7 +22,7 @@ ${_c_bold}Setup:${_c_reset}
   install        run every step below, in order (new machine, or to re-sync)
   packages       system packages: Brewfile / pacman / dnf / apt, and mise
   link           symlink home/* into \$HOME (files in the way are backed up)
-  toolchains     mise tools (Java, Node, Bun, Python, uv, IPython, …) and Rust
+  toolchains     mise tools (Java, Node, Bun, Python, uv, IPython, …), Rust, LaTeX
   docker         Docker Engine (Linux) / check Docker Desktop (macOS)
   fonts          JetBrainsMono Nerd Font
   shell          login shell, zsh/tmux/Neovim plugins, theme
@@ -98,7 +98,10 @@ Anything already in the way is moved to ~/.dotfiles-backup/<date>/ (undo with
 
   mise     tools in ~/.config/mise/config.toml (Java, Node, Bun, Python, uv,
            IPython) and, on Linux, config.linux.toml (Go, TypeScript, CLI tools)
-  rustup   official installer, stable toolchain, clippy, rustfmt, rust-analyzer" ;;
+  rustup   official installer, stable toolchain, clippy, rustfmt, rust-analyzer
+  LaTeX    Perl modules for latexindent; on macOS, Skim set up to jump back to
+           Neovim and a working biber on Apple Silicon (TeX Live itself comes
+           from the packages step)" ;;
     docker) text="  macOS   checks that Docker Desktop is installed (it comes from the Brewfile)
   Linux   adds Docker's repository (Fedora, Debian), installs the engine with
           Compose and Buildx, writes /etc/docker/daemon.json, enables the
