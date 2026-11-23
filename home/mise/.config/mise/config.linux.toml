@@ -1,0 +1,27 @@
+# Linux only (loaded because env.zsh sets MISE_ENV=linux).
+# CLI tools come from mise on every distro so Arch, Fedora and Debian get the
+# same up-to-date versions (Debian's apt neovim is far too old for LazyVim).
+# macOS gets the same tools from packages/Brewfile.
+
+[tools]
+# languages (Homebrew provides these on macOS)
+go = "latest"
+"npm:typescript" = "latest"
+
+# CLI tools
+neovim = "latest"
+starship = "latest"
+fzf = "latest"
+ripgrep = "latest"
+fd = "latest"
+bat = "latest"
+eza = "latest"
+zoxide = "latest"
+delta = "latest"
+lazygit = "latest"
+yazi = "latest"
+gh = "latest"
+jq = "latest"
+tealdeer = "latest"
+fastfetch = "latest"
+tree-sitter = "latest"

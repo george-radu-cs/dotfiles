@@ -1,0 +1,5 @@
+# Copy to ~/.config/git/config.local (untracked) and adjust per machine.
+
+# Work repos use the work identity:
+# [includeIf "gitdir:~/Work/<company>/"]
+# 	path = ~/Work/<company>/.gitconfig

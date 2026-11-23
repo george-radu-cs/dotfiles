@@ -1,0 +1,50 @@
+[user]
+	name = George Radu
+	email = radu.george.mihai.21@gmail.com
+
+[core]
+	editor = nvim
+	pager = delta
+
+[init]
+	defaultBranch = main
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+[rerere]
+	enabled = true
+
+[diff]
+	submodule = log
+	algorithm = histogram
+	colorMoved = default
+[merge]
+	conflictStyle = zdiff3
+
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true       # n / N jump between files
+	line-numbers = true
+	# syntax theme follows $BAT_THEME (set by `theme`)
+
+[alias]
+	mr = !sh -c 'git fetch $1 merge-requests/$2/head:mr-$1-$2 && git checkout mr-$1-$2' -
+	forcepush = push --force-with-lease --force-if-includes
+	lg = log --graph --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %s %C(dim)(%cr)%Creset%C(auto)%d'
+
+# Machine/work specific (untracked): includeIf rules, signing keys, credentials.
+[include]
+	path = config.local

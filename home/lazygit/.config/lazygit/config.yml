@@ -1,0 +1,19 @@
+# lazygit (macOS also reads ~/.config because XDG_CONFIG_HOME is set in .zshenv)
+# Colours are ANSI names, so they follow the active terminal theme.
+gui:
+  nerdFontsVersion: "3"
+  showFileTree: true
+  theme:
+    activeBorderColor: [blue, bold]
+    inactiveBorderColor: [default]
+    selectedLineBgColor: [reverse]
+    cherryPickedCommitFgColor: [blue]
+    cherryPickedCommitBgColor: [cyan]
+    unstagedChangesColor: [red]
+git:
+  diffRenderers:
+    - command: delta --paging=never
+      colorArg: always
+  autoFetch: true
+os:
+  editPreset: nvim-remote # opens files in the surrounding nvim when run inside it
