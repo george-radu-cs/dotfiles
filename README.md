@@ -17,6 +17,7 @@ directly.
 | Terminal | [WezTerm](https://wezterm.org), tmux, JetBrainsMono Nerd Font |
 | Editor | Neovim with [LazyVim](https://www.lazyvim.org) |
 | Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython · official [rustup](https://rustup.rs) · Go, TypeScript, Lua · C/C++ (clang, CMake, Ninja) |
+| LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, lazygit, yazi, gh, btop, fastfetch |
 | Theme | Gruvbox dark (hard) by default; Gruvbox light (hard); Kanagawa wave, dragon and lotus |
@@ -136,3 +137,9 @@ To add a configuration, create `home/<name>/` mirroring its location under
 - All JDKs are Eclipse Temurin (Adoptium) builds of OpenJDK: 11, 17, 21 and 25.
 - On Linux, CLI tools come from mise so that every distribution runs the same
   versions.
+- LaTeX builds keep auxiliary files in `.build/`; the PDF stays next to the
+  source. Defaults live in `~/.config/latexmk/latexmkrc`, and a project's own
+  `.latexmkrc` overrides them (e.g. `$pdf_mode = 4;` for LuaLaTeX).
+- MacTeX's `biber` launcher fails with current Xcode versions; on Apple Silicon
+  the bootstrap extracts its working binary to `~/.local/bin/biber` and removes
+  it again once TeX Live ships a fixed one.
