@@ -14,11 +14,11 @@ done
 
 usage() {
   cat <<EOF
-Usage: ./bootstrap.sh <command> [options]
+${_c_bold}Usage:${_c_reset} ./bootstrap.sh <command> [options]
 
 Set up this machine from the repo. Running without a command shows this help.
 
-Setup:
+${_c_bold}Setup:${_c_reset}
   install        run every step below, in order (new machine, or to re-sync)
   packages       system packages: Brewfile / pacman / dnf / apt, and mise
   link           symlink home/* into \$HOME (files in the way are backed up)
@@ -28,7 +28,7 @@ Setup:
   shell          login shell, zsh/tmux/Neovim plugins, theme
                  Steps can be combined: ./bootstrap.sh link shell
 
-Backups:
+${_c_bold}Backups:${_c_reset}
   backup         copy the current config and shell history, change nothing
   clean          move leftovers of an old setup (zinit, p10k, …) into a backup
   backups        list backups
@@ -36,12 +36,12 @@ Backups:
   check          report missing or broken links
   unlink         remove every link this repo created
 
-Options:
+${_c_bold}Options:${_c_reset}
   -n, --dry-run  print what would happen, change nothing
       --extra    with packages/install on macOS: also install Brewfile.extra
   -h, --help     show this help
 
-Examples:
+${_c_bold}Examples:${_c_reset}
   ./bootstrap.sh install -n      preview a full install
   ./bootstrap.sh backup          snapshot first
   ./bootstrap.sh install         set everything up

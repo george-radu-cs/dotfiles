@@ -10,7 +10,8 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-if [[ -t 1 ]]; then
+# Colours only in a real terminal; NO_COLOR (https://no-color.org) turns them off.
+if [[ -t 1 && -z ${NO_COLOR:-} && ${TERM:-} != dumb ]]; then
   _c_reset=$'\e[0m' _c_bold=$'\e[1m' _c_dim=$'\e[2m' _c_blue=$'\e[34m' _c_green=$'\e[32m' _c_yellow=$'\e[33m' _c_red=$'\e[31m'
 else
   _c_reset='' _c_bold='' _c_dim='' _c_blue='' _c_green='' _c_yellow='' _c_red=''
