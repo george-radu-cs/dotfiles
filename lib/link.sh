@@ -14,7 +14,7 @@ if [[ -z ${BACKUP_DIR:-} ]]; then
 fi
 
 # Packages linked everywhere. Order does not matter.
-LINK_PACKAGES=(zsh git nvim tmux wezterm starship mise lazygit fastfetch vim ideavim bin)
+LINK_PACKAGES=(zsh git nvim tmux wezterm starship mise lazygit fastfetch vim ideavim latex bin)
 
 # Pre-1.0 zsh setup kept everything in $HOME. With ZDOTDIR these are dead files,
 # so move them out of the way to avoid confusion.

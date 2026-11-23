@@ -1,0 +1,19 @@
+# latexmk defaults for every LaTeX project (a project's own .latexmkrc wins).
+# Used by Neovim (vimtex) and by `latexmk` on the command line.
+
+$pdf_mode = 1;                # pdflatex → PDF. Per project: $pdf_mode = 4 (lualatex) or 5 (xelatex)
+$aux_dir  = '.build';         # .aux, .log, .toc, … stay out of the source folder; the PDF stays next to it
+$bibtex_use = 2;              # run biber/bibtex when the bibliography changes; clean their files too
+
+# SyncTeX for jumping between source and PDF; readable errors; never stop for input.
+set_tex_cmds('-synctex=1 -interaction=nonstopmode -file-line-error %O %S');
+
+# Viewer for `latexmk -pv` / `-pvc` outside Neovim (vimtex opens its own).
+if ($^O eq 'darwin') {
+  $pdf_previewer = 'open -a Skim %S';
+} else {
+  $pdf_previewer = 'zathura %S';
+}
+
+# `latexmk -c` also removes these.
+push @generated_exts, qw(synctex.gz run.xml bbl nav snm vrb);
