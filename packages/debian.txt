@@ -1,0 +1,40 @@
+# Debian / Ubuntu (apt). Debian stable ships old CLI tools (e.g. neovim), which
+# is why those come from mise instead. WezTerm and Docker repos are added by
+# the bootstrap scripts.
+
+# base
+git
+git-lfs
+stow
+zsh
+curl
+wget
+unzip
+tar
+xz-utils
+ca-certificates
+gnupg
+fontconfig
+locales
+tmux
+btop
+tree
+wl-clipboard
+xclip
+luarocks
+
+# Lua (LuaJIT is what Neovim embeds)
+lua5.4
+luajit
+
+# C / C++
+build-essential
+clang
+clangd
+lldb
+gdb
+cmake
+ninja-build
+ccache
+cppcheck
+pkg-config

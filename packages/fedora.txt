@@ -1,0 +1,40 @@
+# Fedora (dnf). WezTerm comes from the official COPR and Docker from
+# download.docker.com; both repos are added by the bootstrap scripts.
+
+# base
+git
+git-lfs
+stow
+zsh
+util-linux-user
+curl
+wget
+unzip
+tar
+xz
+gnupg2
+fontconfig
+tmux
+btop
+tree
+wl-clipboard
+xclip
+luarocks
+
+# Lua (LuaJIT is what Neovim embeds)
+lua
+luajit
+
+# C / C++
+gcc
+gcc-c++
+make
+clang
+clang-tools-extra
+lldb
+gdb
+cmake
+ninja-build
+ccache
+cppcheck
+pkgconf-pkg-config

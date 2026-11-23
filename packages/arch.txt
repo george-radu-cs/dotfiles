@@ -1,0 +1,45 @@
+# Arch (pacman). CLI tools such as starship/eza/lazygit come from mise
+# (home/mise/.config/mise/config.linux.toml) so every distro gets the same versions.
+
+# base
+base-devel
+git
+git-lfs
+stow
+zsh
+curl
+wget
+unzip
+tar
+xz
+gnupg
+fontconfig
+tmux
+btop
+tree
+wl-clipboard
+xclip
+luarocks
+mise
+
+# Lua (LuaJIT is what Neovim embeds)
+lua
+luajit
+
+# C / C++
+clang
+lldb
+gdb
+cmake
+ninja
+ccache
+cppcheck
+pkgconf
+
+# GUI
+wezterm
+
+# docker (engine + plugins; configured by lib/docker.sh)
+docker
+docker-compose
+docker-buildx
