@@ -54,7 +54,6 @@ brew "xidel"
 brew "yt-dlp"
 brew "cava"
 brew "kubo"
-brew "texlive"           # TeX for vimtex / LaTeX
 brew "qemu"
 brew "wimlib"
 brew "tmuxinator"

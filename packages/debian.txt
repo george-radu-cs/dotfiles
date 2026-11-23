@@ -38,3 +38,20 @@ ninja-build
 ccache
 cppcheck
 pkg-config
+
+# LaTeX (TeX Live) + zathura viewer
+texlive-latex-base
+texlive-latex-recommended
+texlive-latex-extra
+texlive-fonts-recommended
+texlive-science
+texlive-bibtex-extra
+texlive-luatex
+texlive-xetex
+texlive-extra-utils
+latexmk
+biber
+chktex
+libyaml-tiny-perl
+libfile-homedir-perl
+zathura

@@ -43,3 +43,20 @@ wezterm
 docker
 docker-compose
 docker-buildx
+
+# LaTeX (TeX Live) + zathura viewer
+texlive-basic
+texlive-latex
+texlive-latexrecommended
+texlive-latexextra
+texlive-fontsrecommended
+texlive-mathscience
+texlive-bibtexextra
+texlive-binextra
+texlive-luatex
+texlive-xetex
+biber
+perl-yaml-tiny
+perl-file-homedir
+zathura
+zathura-pdf-mupdf

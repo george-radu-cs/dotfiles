@@ -52,6 +52,11 @@ brew "ccache"
 brew "cppcheck"
 brew "pkgconf"
 
+# --- LaTeX: official TeX Live (MacTeX) + Skim viewer with SyncTeX ------------
+cask "mactex"            # TeX Live: pdflatex/lualatex/xelatex, latexmk, biber, chktex, latexindent, tlmgr
+cask "skim"              # PDF viewer; vimtex jumps source ⇄ PDF (SyncTeX)
+brew "cpanminus"         # installs latexindent's Perl modules (see lib/latex.sh)
+
 # --- GUI ---------------------------------------------------------------------
 cask "wezterm"
 cask "font-jetbrains-mono-nerd-font"
