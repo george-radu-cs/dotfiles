@@ -1,0 +1,5 @@
+# Global gitignore: OS/editor junk only, nothing project-specific.
+.DS_Store
+._*
+*.swp
+*~

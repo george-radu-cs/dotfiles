@@ -1,0 +1,6 @@
+# Machine-specific files that live inside linked config dirs; never committed.
+home/zsh/.config/zsh/local.zsh
+home/zsh/.config/zsh/local.zprofile
+home/git/.config/git/config.local
+home/lazygit/.config/lazygit/state.yml
+.DS_Store

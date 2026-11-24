@@ -1,0 +1,59 @@
+# macOS optional packages: `./bootstrap.sh --extra` (or brew bundle --file ...)
+# Carried over from the previous machine; prune freely.
+
+# --- cloud / containers / k8s ------------------------------------------------
+cask "azure-cli"
+brew "doctl"
+brew "helm"
+brew "minikube"
+brew "kubectx"
+
+# --- dev tooling -------------------------------------------------------------
+brew "ast-grep"
+brew "golangci-lint"
+brew "protoc-gen-go"
+brew "protoc-gen-go-grpc"
+brew "maven"
+brew "gradle"
+brew "php"
+brew "pnpm"
+brew "prettier"
+brew "watchman"
+brew "git-flow-next"
+brew "mkcert"
+brew "automake"
+brew "autoconf-archive"
+brew "postgresql@15"
+brew "mysql"
+
+# --- mobile ------------------------------------------------------------------
+brew "cocoapods"
+brew "fastlane"
+brew "bundletool"
+
+# --- misc CLI ----------------------------------------------------------------
+brew "onefetch"
+brew "parallel"
+brew "pv"
+brew "nmap"
+brew "yt-dlp"
+brew "cava"
+brew "qemu"
+brew "tmuxinator"
+
+# --- apps --------------------------------------------------------------------
+cask "bruno"             # API client (open source; replaces Postman and Insomnia)
+cask "dbeaver-community"
+cask "mongodb-compass"
+cask "ngrok"
+cask "notion"
+cask "obs"
+cask "qbittorrent"
+cask "vlc"
+cask "utm"
+cask "vmware-fusion"
+cask "wireshark-app"
+cask "gpg-suite"
+cask "stats"
+cask "macs-fan-control"
+cask "rar"

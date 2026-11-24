@@ -1,0 +1,147 @@
+{
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.rulers": [80, 120],
+  "latex-workshop.view.pdf.viewer": "tab",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false,
+    "yaml": true,
+    "properties": false,
+    "shellscript": true,
+  },
+  "editor.codeActionsOnSave": {},
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "editor.linkedEditing": true,
+  "cmake.configureOnOpen": false,
+  "dart.lineLength": 120,
+  "[rust]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+  },
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80, 120],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "terminal.integrated.inheritEnv": false,
+  "gitlens.defaultDateFormat": null,
+  "errorLens.enabledDiagnosticLevels": ["error", "info", "warning", "hint"],
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "workbench.editor.enablePreview": false,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+  },
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-containers",
+  },
+  "editor.formatOnSave": true,
+  "git.openRepositoryInParentFolders": "never",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "editor.quickSuggestions": {
+    "strings": true,
+  },
+  "redhat.telemetry.enabled": false,
+  "editor.inlineSuggest.enabled": true,
+  "window.commandCenter": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "colorize.languages": ["javascript", "typescript"],
+  "go.toolsManagement.autoUpdate": true,
+  "prettier.configPath": "",
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.lineNumbers": "relative",
+  "window.menuBarVisibility": "compact",
+  "window.dialogStyle": "custom",
+  "window.titleBarStyle": "custom",
+  "terminal.integrated.fontFamily": "JetBrainsMonoNFM-Regular",
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg",
+  },
+  "svg.preview.mode": "svg",
+  "material-icon-theme.files.color": "#90a4ae",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "prisma.showPrismaDataPlatformNotification": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.colorTheme": "Gruvbox Dark Hard",
+  "terminal.integrated.scrollback": 100000,
+  "gitlens.hovers.currentLine.over": "line",
+  "rust-analyzer.workspace.discoverConfig": null,
+  "latex-workshop.formatting.latex": "latexindent",
+
+  // LaTeX: LuaLaTeX through latexmk, which also runs biber and reruns as needed.
+  // Auxiliary files go to .build/ (set in ~/.config/latexmk/latexmkrc), the PDF
+  // stays next to the source — the same layout as Neovim's vimtex.
+  "latex-workshop.latex.recipes": [
+    { "name": "latexmk (LuaLaTeX)", "tools": ["latexmk-lualatex"] },
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-lualatex",
+      "command": "latexmk",
+      "args": [
+        "-lualatex",
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%",
+      ],
+      "env": {},
+    },
+  ],
+  "latex-workshop.intellisense.biblatexJSON.replace": {},
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "gitlens.views.commits.showStashes": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "chat.viewSessions.orientation": "stacked",
+
+  // Vim mode: vscode-neovim runs the real Neovim (LazyVim's vscode extra loads
+  // the keymaps and options). The affinity setting gives it its own process.
+  "extensions.experimental.affinity": { "asvetliakov.vscode-neovim": 1 },
+  "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+
+  // C/C++: clangd (same language server as Neovim) does completion and
+  // diagnostics; Microsoft's C/C++ extension stays for debugging only.
+  "C_Cpp.intelliSenseEngine": "disabled",
+}

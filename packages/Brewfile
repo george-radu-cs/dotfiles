@@ -1,0 +1,89 @@
+# macOS core packages: `brew bundle --file packages/Brewfile`
+# Languages come from mise on every OS (home/mise/.config/mise/config.toml).
+# CLI tools come from here on macOS and from mise's config.linux.toml on Linux.
+# Optional/occasional tools live in Brewfile.extra (bootstrap --extra).
+
+# --- shell & terminal ------------------------------------------------------
+brew "zsh"
+brew "stow"
+# git itself is Apple's (Xcode Command Line Tools); only the LFS extension comes from brew
+brew "git-lfs"
+brew "gnupg"
+brew "coreutils"
+brew "curl"
+brew "wget"
+brew "tmux"
+brew "vim"
+brew "mise"
+brew "btop"
+brew "tree"
+brew "luarocks"          # some LazyVim plugins build rocks
+
+# --- CLI tools (Linux: home/mise/.config/mise/config.linux.toml) --------------
+brew "neovim"
+brew "starship"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "zoxide"
+brew "yazi"
+brew "jq"
+brew "tealdeer"
+brew "fastfetch"
+brew "tree-sitter-cli"   # nvim-treesitter compiles parsers with it
+brew "shellcheck"
+brew "stylua"
+
+# --- git & containers ---------------------------------------------------------
+brew "git-delta"
+brew "difftastic"        # structural diffs: git dft / git dlog
+brew "lazygit"
+brew "lazydocker"
+brew "gh"
+brew "opentofu"          # `tofu`: open-source Terraform; terraform-ls uses it
+
+# --- databases & security ----------------------------------------------------
+brew "pgcli"             # PostgreSQL shell with completion and highlighting
+brew "mycli"             # MySQL shell, same idea
+brew "trivy"             # vulnerability scanner for images, filesystems, dependencies
+
+# --- disk & benchmarks --------------------------------------------------------
+brew "dust"              # du
+brew "duf"               # df
+brew "hyperfine"         # benchmark commands
+brew "oha"               # HTTP load testing, live view
+brew "wrk"               # HTTP load testing, maximum throughput
+brew "k6"                # scripted load tests
+
+# --- languages -----------------------------------------------------------------
+# Rust comes from the official rustup installer (lib/toolchains.sh), not brew.
+brew "lua"
+brew "luajit"            # what Neovim embeds
+
+# --- C / C++ (clang itself comes from the Xcode Command Line Tools) ---------
+brew "llvm"              # clangd, clang-format, clang-tidy, lldb
+brew "cmake"
+brew "ninja"
+brew "ccache"
+brew "cppcheck"
+brew "pkgconf"
+
+# --- LaTeX: official TeX Live (MacTeX) + Skim viewer with SyncTeX ------------
+cask "mactex"            # TeX Live: pdflatex/lualatex/xelatex, latexmk, biber, chktex, latexindent, tlmgr
+cask "skim"              # PDF viewer; vimtex jumps source ⇄ PDF (SyncTeX)
+brew "cpanminus"         # installs latexindent's Perl modules (see lib/latex.sh)
+
+# --- GUI ---------------------------------------------------------------------
+cask "wezterm"
+cask "visual-studio-code"  # settings and extensions: vscode/ (bootstrap link + shell steps)
+cask "font-jetbrains-mono-nerd-font"
+cask "font-jetbrains-mono"            # plain variant, used by VS Code
+cask "docker-desktop"
+cask "alfred"
+cask "obsidian"
+
+# --- Mac App Store (needs you signed in to the App Store; `mas` is the CLI) ---
+brew "mas"
+mas "Bitwarden", id: 1352778147   # App Store build: includes the Safari extension

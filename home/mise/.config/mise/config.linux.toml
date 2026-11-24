@@ -1,0 +1,43 @@
+# Linux only (loaded because env.zsh sets MISE_ENV=linux): CLI tools.
+# Distro versions are old or missing (Debian's neovim is too old for LazyVim;
+# starship, lazygit and yazi aren't packaged everywhere), so mise installs the
+# same current versions on Arch, Fedora and Debian.
+# macOS gets the same tools from packages/Brewfile.
+
+[tools]
+# --- shell & editor ----------------------------------------------------------
+neovim = "latest"
+starship = "latest"
+fzf = "latest"
+ripgrep = "latest"
+fd = "latest"
+bat = "latest"
+eza = "latest"
+zoxide = "latest"
+yazi = "latest"
+jq = "latest"
+tealdeer = "latest"
+fastfetch = "latest"
+tree-sitter = "latest"      # nvim-treesitter compiles parsers with it
+shellcheck = "latest"
+stylua = "latest"
+
+# --- git & containers --------------------------------------------------------
+delta = "latest"
+difftastic = "latest"       # structural diffs: git dft / git dlog
+lazygit = "latest"
+lazydocker = "latest"
+gh = "latest"
+opentofu = "latest"         # `tofu`: open-source Terraform; terraform-ls uses it
+
+# --- databases & security ----------------------------------------------------
+"pipx:pgcli" = "latest"     # PostgreSQL shell (needs libpq from the distro packages)
+"pipx:mycli" = "latest"     # MySQL shell
+trivy = "latest"            # vulnerability scanner
+
+# --- disk & benchmarks -------------------------------------------------------
+dust = "latest"             # du
+duf = "latest"              # df
+hyperfine = "latest"        # benchmark commands
+oha = "latest"              # HTTP load testing (wrk comes from the distro packages)
+k6 = "latest"               # scripted load tests

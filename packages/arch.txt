@@ -1,0 +1,69 @@
+# Arch (pacman). Languages come from mise (home/mise/.config/mise/config.toml)
+# and CLI tools (neovim, starship, …) from mise's config.linux.toml, so every
+# distro gets the same versions.
+
+# base
+base-devel
+git
+git-lfs
+stow
+zsh
+curl
+wget
+unzip
+tar
+xz
+gnupg
+fontconfig
+tmux
+btop
+tree
+wl-clipboard
+xclip
+luarocks
+mise
+
+flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
+openssl               # to build wrk (only in the AUR on Arch)
+
+postgresql-libs       # libpq, for pgcli
+
+# Lua (LuaJIT is what Neovim embeds)
+lua
+luajit
+
+# C / C++
+clang
+lldb
+gdb
+cmake
+ninja
+ccache
+cppcheck
+pkgconf
+
+# GUI
+wezterm
+
+# docker (engine + plugins; configured by lib/docker.sh)
+docker
+docker-compose
+docker-buildx
+
+# LaTeX (TeX Live) + zathura viewer
+texlive-basic
+texlive-latex
+texlive-latexrecommended
+texlive-latexextra
+texlive-fontsrecommended
+texlive-mathscience
+texlive-bibtexextra
+texlive-binextra
+texlive-luatex
+texlive-xetex
+biber
+perl-yaml-tiny
+perl-file-homedir
+zathura
+zathura-pdf-mupdf

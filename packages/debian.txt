@@ -1,0 +1,63 @@
+# Debian / Ubuntu (apt). Debian stable ships old CLI tools (e.g. neovim), which
+# is why CLI tools come from mise (config.linux.toml) instead. WezTerm and Docker repos are added by
+# the bootstrap scripts.
+
+# base
+git
+git-lfs
+stow
+zsh
+curl
+wget
+unzip
+tar
+xz-utils
+ca-certificates
+gnupg
+fontconfig
+locales
+tmux
+btop
+tree
+wl-clipboard
+xclip
+luarocks
+
+flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
+wrk                   # HTTP benchmarking (oha and k6 come from mise)
+
+libpq5                # for pgcli
+
+# Lua (LuaJIT is what Neovim embeds)
+lua5.4
+luajit
+
+# C / C++
+build-essential
+clang
+clangd
+lldb
+gdb
+cmake
+ninja-build
+ccache
+cppcheck
+pkg-config
+
+# LaTeX (TeX Live) + zathura viewer
+texlive-latex-base
+texlive-latex-recommended
+texlive-latex-extra
+texlive-fonts-recommended
+texlive-science
+texlive-bibtex-extra
+texlive-luatex
+texlive-xetex
+texlive-extra-utils
+latexmk
+biber
+chktex
+libyaml-tiny-perl
+libfile-homedir-perl
+zathura

@@ -1,0 +1,26 @@
+# Language toolchains for every machine: `mise install` installs all of them,
+# the same versions on macOS, Arch, Fedora and Debian. Rust: official rustup.
+# CLI tools come from Homebrew on macOS (packages/Brewfile) and from
+# config.linux.toml on Linux (loaded because env.zsh sets MISE_ENV=linux).
+# Per-project versions go in a project's mise.toml / .nvmrc / .java-version.
+#
+# Java: the first entry is the default; switch per shell with java11 … java25
+# (aliases in zsh) or per project with `mise use java@temurin-17`.
+# All JDKs are Eclipse Temurin (Adoptium) builds of OpenJDK, GPLv2 + Classpath
+# Exception.
+
+[tools]
+java = ["temurin-21", "temurin-25", "temurin-17", "temurin-11"]
+node = "lts"
+bun = "latest"
+python = "3.15"
+uv = "latest"
+"pipx:ipython" = "latest"   # ipython / ipython3, isolated venv (installed with uv)
+go = "latest"
+"npm:typescript" = "latest" # tsc
+zig = "latest"              # official Zig builds; zls (Neovim) needs the compiler
+flutter = "latest"          # Flutter SDK, includes Dart
+
+[settings]
+# Read .nvmrc / .node-version / .java-version / .python-version files.
+idiomatic_version_file_enable_tools = ["node", "java", "python"]

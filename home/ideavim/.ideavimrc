@@ -1,0 +1,18 @@
+" IdeaVim (JetBrains IDEs). Mirrors the core nvim habits.
+let mapleader = " "
+set relativenumber
+set number
+set scrolloff=8
+set incsearch
+set ignorecase smartcase
+
+" move selected lines
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" keep the cursor centred
+nnoremap J mzJ`z
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
