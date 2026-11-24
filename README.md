@@ -45,7 +45,9 @@ cd ~/Personal/dotfiles
 ./bootstrap.sh install        # install and configure everything
 ```
 
-Open a new terminal (or run `exec zsh`) when it finishes. On Linux, log out
+Open a new terminal (or run `exec zsh`) when it finishes. From then on the
+bootstrap also runs from any directory as `dotctl` (for example `dotctl
+doctor`); `./bootstrap.sh` inside the repo keeps working. On Linux, log out
 and back in once so that membership of the `docker` group takes effect.
 
 On a fresh Mac, the first `git` command prompts to install the Xcode Command
@@ -53,9 +55,9 @@ Line Tools. Accept, then run the clone again.
 
 ### What the bootstrap does
 
-`./bootstrap.sh install` runs seven steps in order. Each step can also be run on
-its own, for example `./bootstrap.sh link`, and every step is safe to re-run.
-`./bootstrap.sh help <command>` explains any command in detail, and zsh
+`dotctl install` runs seven steps in order. Each step can also be run on
+its own, for example `dotctl link`, and every step is safe to re-run.
+`dotctl help <command>` explains any command in detail, and zsh
 completes commands and options with Tab.
 
 | Step         | macOS                                                                                                                                                | Linux                                                                                                                                                          |
@@ -88,10 +90,10 @@ tmux and Neovim keys, and everyday workflows, see [docs/TOOLS.md](docs/TOOLS.md)
 ## Maintenance
 
 ```sh
-./bootstrap.sh doctor     # health report; suggests a fix for every problem
-./bootstrap.sh update     # upgrade packages, mise tools, Rust, tldr pages, zsh/tmux/Neovim plugins, TeX Live
-./bootstrap.sh prune      # list packages you installed that the repo doesn't manage, and unused mise versions
-./bootstrap.sh prune -y   # …and remove them
+dotctl doctor     # health report; suggests a fix for every problem
+dotctl update     # upgrade packages, mise tools, Rust, tldr pages, zsh/tmux/Neovim plugins, TeX Live
+dotctl prune      # list packages you installed that the repo doesn't manage, and unused mise versions
+dotctl prune -y   # …and remove them
 ```
 
 `update` also refreshes Neovim's treesitter parsers and Mason tools. Commit the
@@ -104,8 +106,8 @@ Plasma settings are copied rather than linked, because Plasma replaces its
 config files when it saves them.
 
 ```sh
-./bootstrap.sh kde-save   # on a configured machine: copy its Plasma settings into kde/
-./bootstrap.sh kde        # on another machine: apply them (log out and in afterwards)
+dotctl kde-save   # on a configured machine: copy its Plasma settings into kde/
+dotctl kde        # on another machine: apply them (log out and in afterwards)
 ```
 
 `theme <name>` also generates a matching Plasma colour scheme and applies it
@@ -118,12 +120,12 @@ Nothing is deleted by the bootstrap. Files it replaces are moved to
 change.
 
 ```sh
-./bootstrap.sh backup               # copy the current configuration and shell history
-./bootstrap.sh clean                # move leftovers of a previous setup into a backup
-./bootstrap.sh backups              # list restorable backups
-./bootstrap.sh restore [name]       # undo the newest (or the named) backup
-./bootstrap.sh check                # report missing or broken links
-./bootstrap.sh unlink               # remove all links created by this repository
+dotctl backup               # copy the current configuration and shell history
+dotctl clean                # move leftovers of a previous setup into a backup
+dotctl backups              # list restorable backups
+dotctl restore [name]       # undo the newest (or the named) backup
+dotctl check                # report missing or broken links
+dotctl unlink               # remove all links created by this repository
 ```
 
 ## Repository layout
@@ -157,4 +159,4 @@ Settings Sync: changing a setting in VS Code edits the repo, and
 
 To add a configuration, create `home/<name>/` mirroring its location under
 `$HOME`, add the name to `LINK_PACKAGES` in `lib/link.sh`, and run
-`./bootstrap.sh link`. To add a theme, copy a palette in `themes/`.
+`dotctl link`. To add a theme, copy a palette in `themes/`.

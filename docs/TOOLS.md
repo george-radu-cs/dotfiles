@@ -2,7 +2,7 @@
 
 What this setup gives you on the command line, what each tool replaces, the
 commands worth knowing, and workflows that combine them. Everything here is
-installed by `./bootstrap.sh install`.
+installed by `dotctl install`.
 
 ## New in this setup
 
@@ -265,7 +265,7 @@ terminal; VS Code keeps its own UI, debugger and extensions.
 - Settings and keybindings are files in the repo (`vscode/`); changing a
   setting in VS Code edits the repo, so commit it with `dots`.
 - Add an extension: install it, then add its ID (shown on the extension page)
-  to `vscode/extensions.txt`. `./bootstrap.sh prune` lists installed extensions
+  to `vscode/extensions.txt`. `dotctl prune` lists installed extensions
   that aren't in the file.
 - Language support matches Neovim: Ruff for Python, clangd for C/C++, Gruvbox
   as the theme.
@@ -315,11 +315,11 @@ Neovim uses OpenTofu for Terraform files too (validation and formatting).
 ## Looking after the setup
 
 ```sh
-./bootstrap.sh doctor           # health report with fixes
-./bootstrap.sh update           # upgrade everything
-./bootstrap.sh prune            # list packages the repo no longer manages (-y removes them)
-./bootstrap.sh kde-save         # Linux: save this machine's KDE Plasma settings into the repo
-./bootstrap.sh help <command>   # details for any command
+dotctl doctor           # health report with fixes
+dotctl update           # upgrade everything
+dotctl prune            # list packages the repo no longer manages (-y removes them)
+dotctl kde-save         # Linux: save this machine's KDE Plasma settings into the repo
+dotctl help <command>   # details for any command
 theme kanagawa-wave             # switch the colour theme everywhere (theme alone lists them)
 zbench                          # how fast the shell starts
 ```
