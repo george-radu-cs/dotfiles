@@ -209,8 +209,10 @@ _update_nvim() {
   run nvim --headless "+lua vim.defer_fn(function()
     require('lazy').load({ plugins = { 'mason.nvim' } })
     local reg = require('mason-registry')
-    reg.refresh(function()
-      local todo = {}
+    -- Mason's callbacks run in a fast event context, where Ex commands like
+    -- :qa are not allowed; vim.schedule hands each step back to the main loop.
+    reg.refresh(vim.schedule_wrap(function()
+      local todo, failed = {}, {}
       for _, p in ipairs(reg.get_installed_packages()) do
         local ok, latest = pcall(p.get_latest_version, p)
         if ok and latest and p:get_installed_version() ~= latest then table.insert(todo, p) end
@@ -218,12 +220,22 @@ _update_nvim() {
       local i = 0
       local function next_one()
         i = i + 1
-        if i > #todo then vim.cmd('qa!') return end
+        if i > #todo then
+          if #failed > 0 then
+            io.stdout:write('  could not download: ' .. table.concat(failed, ', ') .. ' (Mason registry issue; the installed version is kept)\n')
+          end
+          vim.cmd('qa!')
+          return
+        end
         local p = todo[i]
-        p:install({}, function(success) io.stdout:write((success and '  updated ' or '  failed  ') .. p.name .. '\n'); next_one() end)
+        p:install({}, vim.schedule_wrap(function(success)
+          if success then io.stdout:write('  updated ' .. p.name .. '\n') else table.insert(failed, p.name) end
+          next_one()
+        end))
       end
+      if #todo == 0 then io.stdout:write('  all Mason tools up to date\n') end
       next_one()
-    end)
+    end))
   end, 1000)"
 }
 
