@@ -204,32 +204,39 @@ _update_texlive() {
 # --- prune ---------------------------------------------------------------------
 
 # List what is installed but not managed by the repo; remove it with -y.
+# Never touches App Store apps, taps, or packages other packages depend on.
 prune() {
   local remove=${ASSUME_YES:-0} found=0 line
   if is_macos; then
-    local all="$XDG_CACHE_HOME/dotfiles-Brewfile.all"
-    mkdir -p "$(dirname "$all")"
-    cat "$DOTFILES/packages/Brewfile" "$DOTFILES/packages/Brewfile.extra" >"$all"
-    local list=() out err="$XDG_CACHE_HOME/dotfiles-prune.err"
-    # brew bundle cleanup exits 1 both when it finds packages and when it fails,
-    # so tell them apart by its error output.
-    out=$(brew bundle cleanup --file "$all" 2>"$err") || true
-    if grep -q '^Error:' "$err"; then
-      warn "Homebrew check failed:"
-      grep -A1 '^Error:' "$err" | sed 's/^/      /' >&2
-      found=1
+    # Only formulae you installed yourself (leaves) and casks that are in neither
+    # Brewfile. Dependencies are left to `brew autoremove`; App Store apps and
+    # taps are never touched (`brew bundle cleanup` would remove those too).
+    local wanted name formulae=() casks=()
+    wanted=" $(sed -nE 's/^(brew|cask) "([^"]+)".*/\2/p' "$DOTFILES/packages/Brewfile" "$DOTFILES/packages/Brewfile.extra" | sed 's|.*/||' | tr '\n' ' ') "
+    while IFS= read -r name; do
+      [[ -n $name && $wanted != *" ${name##*/} "* ]] && formulae+=("$name")
+    done < <(brew leaves --installed-on-request 2>/dev/null)
+    local current
+    while IFS= read -r name; do
+      [[ -n $name && $wanted != *" $name "* ]] || continue
+      # Renamed casks (e.g. wireshark → wireshark-app) are listed under their new name.
+      current=$(brew info --cask "$name" 2>/dev/null | sed -n '1s/^==> \([^ ]*\).*/\1/p')
+      [[ -n $current && $wanted == *" $current "* ]] && continue
+      casks+=("$name")
+    done < <(brew list --cask -1 2>/dev/null)
+
+    if [[ ${#formulae[@]} -gt 0 ]]; then
+      found=1; info "Homebrew formulae you installed that neither Brewfile lists:"; columns "${formulae[@]}"
     fi
-    while IFS= read -r line; do [[ -n $line ]] && list+=("$line"); done \
-      < <(printf '%s\n' "$out" | grep -v -E '^(Would|Run)' || true)
-    if grep -q '^Error:' "$err"; then
-      :
-    elif [[ ${#list[@]} -gt 0 ]]; then
-      found=1
-      info "Homebrew packages not in Brewfile or Brewfile.extra:"
-      columns "${list[@]}"
-      if [[ $remove == 1 ]]; then run brew bundle cleanup --force --file "$all"; run brew autoremove; fi
-    else
+    if [[ ${#casks[@]} -gt 0 ]]; then
+      found=1; info "Homebrew casks that neither Brewfile lists:"; columns "${casks[@]}"
+    fi
+    if [[ ${#formulae[@]} -eq 0 && ${#casks[@]} -eq 0 ]]; then
       ok "Homebrew: nothing outside the Brewfiles"
+    elif [[ $remove == 1 ]]; then
+      [[ ${#formulae[@]} -gt 0 ]] && run brew uninstall --formula "${formulae[@]}"
+      [[ ${#casks[@]} -gt 0 ]] && run brew uninstall --cask "${casks[@]}"
+      run brew autoremove   # dependencies nothing needs anymore
     fi
   fi
   local mise unused=() line
