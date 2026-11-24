@@ -77,6 +77,7 @@ brew "cpanminus"         # installs latexindent's Perl modules (see lib/latex.sh
 
 # --- GUI ---------------------------------------------------------------------
 cask "wezterm"
+cask "visual-studio-code"  # settings and extensions: vscode/ (bootstrap link + shell steps)
 cask "font-jetbrains-mono-nerd-font"
 cask "font-jetbrains-mono"            # plain variant, used by VS Code
 cask "docker-desktop"

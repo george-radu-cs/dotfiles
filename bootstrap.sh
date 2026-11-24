@@ -7,7 +7,7 @@ set -euo pipefail
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export DOTFILES
 
-for lib in common link packages toolchains latex docker fonts shell kde maintenance; do
+for lib in common link packages toolchains latex docker fonts shell kde vscode maintenance; do
   # shellcheck source=/dev/null
   source "$DOTFILES/lib/$lib.sh"
 done
@@ -21,11 +21,11 @@ Set up this machine from the repo. Running without a command shows this help.
 ${_c_bold}Setup:${_c_reset}
   install        run every step below, in order (new machine, or to re-sync)
   packages       system packages: Brewfile / pacman / dnf / apt, and mise
-  link           symlink home/* into \$HOME (files in the way are backed up)
+  link           symlink home/* into \$HOME and VS Code's settings (files in the way are backed up)
   toolchains     mise tools (Java, Node, Bun, Python, uv, IPython, …), Rust, LaTeX
   docker         Docker Engine (Linux) / check Docker Desktop (macOS)
   fonts          JetBrainsMono Nerd Font
-  shell          login shell, zsh/tmux/Neovim plugins, theme
+  shell          login shell, zsh/tmux/Neovim plugins, VS Code extensions, theme
   kde            Linux: KDE Plasma settings saved in kde/ (see kde-save)
                  Steps can be combined: ./bootstrap.sh link shell
 
@@ -225,7 +225,7 @@ case $MODE in
   prune)   prune; exit 0 ;;
   kde-save) kde_save; exit 0 ;;
   check)   check_links; exit $? ;;
-  unlink)  unlink_all; exit 0 ;;
+  unlink)  unlink_all; unlink_vscode; exit 0 ;;
   backup)  backup_config; exit 0 ;;
   clean)   clean_legacy; info "backups: $(tilde "$BACKUP_DIR")"; exit 0 ;;
   backups)
@@ -252,11 +252,11 @@ for s in "${STEPS[@]}"; do
   n=$((n + 1)) t0=$SECONDS STEP_NOTE=""
   case $s in
     packages)   stage $n "$total" "Packages";   install_packages ;;
-    link)       stage $n "$total" "Links";      link_all ;;
+    link)       stage $n "$total" "Links";      link_all; link_vscode ;;
     toolchains) stage $n "$total" "Toolchains"; install_toolchains ;;
     docker)     stage $n "$total" "Docker";     install_docker ;;
     fonts)      stage $n "$total" "Fonts";      install_fonts ;;
-    shell)      stage $n "$total" "Shell";      setup_shell; setup_tmux; setup_tldr; setup_nvim; setup_theme ;;
+    shell)      stage $n "$total" "Shell";      setup_shell; setup_tmux; setup_tldr; setup_nvim; install_vscode_extensions; setup_theme ;;
     kde)        stage $n "$total" "KDE";        kde_apply ;;
   esac
   took=$(human_time $((SECONDS - t0)))

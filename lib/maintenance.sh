@@ -98,6 +98,19 @@ doctor() {
     _doc_err "nvim not installed"
   fi
 
+  _doc_head "VS Code"
+  if [[ -n $(_vscode_cli) ]]; then
+    local vdir vbad=0 vf
+    vdir=$(vscode_user_dir)
+    for vf in "${VSCODE_FILES[@]}"; do _links_into_repo "$vdir/$vf" || vbad=1; done
+    (( vbad == 0 )) && _doc_ok "settings and keybindings linked" || _doc_err "VS Code settings not linked — run: ./bootstrap.sh link"
+    local vmissing
+    vmissing=$(comm -23 <(_vscode_wanted | sort) <("$(_vscode_cli)" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' | sort) | grep -c . || true)
+    (( vmissing == 0 )) && _doc_ok "all listed extensions installed" || _doc_warn "$vmissing extensions missing — run: ./bootstrap.sh shell"
+  else
+    _doc_warn "VS Code not installed"
+  fi
+
   _doc_head "LaTeX"
   if has latexmk; then
     biber --version >/dev/null 2>&1 && _doc_ok "biber works" || _doc_err "biber fails — run: ./bootstrap.sh toolchains"
@@ -245,6 +258,20 @@ prune() {
       run brew autoremove   # dependencies nothing needs anymore
     fi
   fi
+  local extra_ext=()
+  while IFS= read -r line; do [[ -n $line ]] && extra_ext+=("$line"); done < <(vscode_extra_extensions)
+  if [[ ${#extra_ext[@]} -gt 0 ]]; then
+    found=1
+    info "VS Code extensions not in vscode/extensions.txt:"
+    columns "${extra_ext[@]}"
+    if [[ $remove == 1 ]]; then
+      local cli; cli=$(_vscode_cli)
+      for line in "${extra_ext[@]}"; do run "$cli" --uninstall-extension "$line" >/dev/null 2>&1 || warn "could not remove $line"; done
+    fi
+  else
+    ok "VS Code: no extensions outside the list"
+  fi
+
   local mise unused=() line
   mise=$(_mise_bin)
   _mise_env
