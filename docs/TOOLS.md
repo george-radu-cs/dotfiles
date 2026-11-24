@@ -8,39 +8,39 @@ installed by `./bootstrap.sh install`.
 
 The tools added most recently, each explained further down:
 
-| Tool | Try |
-| --- | --- |
-| difftastic | `git dft` — the current diff, compared by code structure |
-| lazydocker | `lazydocker` — containers, logs and Compose stacks in one view |
-| dust / duf | `dust` — what fills this folder; `duf` — free space per disk |
-| hyperfine | `hyperfine 'zsh -i -c exit'` — benchmark any command |
-| oha / wrk / k6 | `oha -z 10s http://localhost:8080` — load-test an HTTP service |
-| OpenTofu | `tofu init && tofu plan` — open-source Terraform |
-| pgcli / mycli | `pgcli postgres://localhost/app` — database shells with completion |
-| trivy | `trivy image nginx:latest` — find known vulnerabilities |
-| obsidian.nvim | open a note in `~/Obsidian/…`, then `<Space>oo` — your vault in Neovim |
-| Flutter, Zig, Go, TypeScript | managed by mise, like Java, Node and Python |
+| Tool                         | Try                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| difftastic                   | `git dft` — the current diff, compared by code structure               |
+| lazydocker                   | `lazydocker` — containers, logs and Compose stacks in one view         |
+| dust / duf                   | `dust` — what fills this folder; `duf` — free space per disk           |
+| hyperfine                    | `hyperfine 'zsh -i -c exit'` — benchmark any command                   |
+| oha / wrk / k6               | `oha -z 10s http://localhost:8080` — load-test an HTTP service         |
+| OpenTofu                     | `tofu init && tofu plan` — open-source Terraform                       |
+| pgcli / mycli                | `pgcli postgres://localhost/app` — database shells with completion     |
+| trivy                        | `trivy image nginx:latest` — find known vulnerabilities                |
+| obsidian.nvim                | open a note in `~/Obsidian/…`, then `<Space>oo` — your vault in Neovim |
+| Flutter, Zig, Go, TypeScript | managed by mise, like Java, Node and Python                            |
 
 ## At a glance
 
-| Instead of | Use | Why |
-| --- | --- | --- |
-| `cat` | `bat` | syntax highlighting, line numbers, git changes in the margin |
-| `ls` | `ls` (now `eza`) | colours, icons, git status, tree view |
-| `cd` | `z` (zoxide) | jumps to folders you use often by a fragment of their name |
-| `find` | `fd` | simpler syntax, fast, skips `.gitignore`d files |
-| `grep -r` | `rg` (ripgrep) | much faster, respects `.gitignore`, readable output |
-| `git diff` output | `delta` | side-by-side-ready, highlighted diffs (automatic in git) |
-| git on the command line | `lg` (lazygit) | stage, commit, rebase, push from a terminal UI |
-| `top` / `htop` | `btop` | CPU, memory, disks, network and processes in one view |
-| `man` | `tldr` | the five examples you actually need |
-| file manager | `y` (yazi) | fast terminal file manager with previews |
-| `neofetch` | `fastfetch` | system info, shown when a terminal opens |
-| GitHub website | `gh` | pull requests, issues and repos from the terminal |
-| JSON in the terminal | `jq` | filter and pretty-print JSON |
-| `du` / `df` | `dust` / `duf` | what fills the disk, as a tree / disks at a glance |
-| `docker ps`, `docker logs` | `lazydocker` | containers, logs and Compose stacks in one terminal UI |
-| `time cmd` | `hyperfine` | repeated runs with mean ± deviation, compare commands |
+| Instead of                 | Use              | Why                                                          |
+| -------------------------- | ---------------- | ------------------------------------------------------------ |
+| `cat`                      | `bat`            | syntax highlighting, line numbers, git changes in the margin |
+| `ls`                       | `ls` (now `eza`) | colours, icons, git status, tree view                        |
+| `cd`                       | `z` (zoxide)     | jumps to folders you use often by a fragment of their name   |
+| `find`                     | `fd`             | simpler syntax, fast, skips `.gitignore`d files              |
+| `grep -r`                  | `rg` (ripgrep)   | much faster, respects `.gitignore`, readable output          |
+| `git diff` output          | `delta`          | side-by-side-ready, highlighted diffs (automatic in git)     |
+| git on the command line    | `lg` (lazygit)   | stage, commit, rebase, push from a terminal UI               |
+| `top` / `htop`             | `btop`           | CPU, memory, disks, network and processes in one view        |
+| `man`                      | `tldr`           | the five examples you actually need                          |
+| file manager               | `y` (yazi)       | fast terminal file manager with previews                     |
+| `neofetch`                 | `fastfetch`      | system info, shown when a terminal opens                     |
+| GitHub website             | `gh`             | pull requests, issues and repos from the terminal            |
+| JSON in the terminal       | `jq`             | filter and pretty-print JSON                                 |
+| `du` / `df`                | `dust` / `duf`   | what fills the disk, as a tree / disks at a glance           |
+| `docker ps`, `docker logs` | `lazydocker`     | containers, logs and Compose stacks in one terminal UI       |
+| `time cmd`                 | `hyperfine`      | repeated runs with mean ± deviation, compare commands        |
 
 `cat`, `find` and `grep` still work as before; only `ls` and `vim` are aliased
 (to `eza` and `nvim`).
@@ -78,13 +78,13 @@ rg -i login -t py # case-insensitive, Python files only;  rg -l … lists file n
 
 fzf key bindings, everywhere in the shell:
 
-| Keys | Does |
-| --- | --- |
-| `Ctrl-R` | fuzzy-search your command history |
-| `Ctrl-T` | insert a file path (with a bat preview) |
-| `Alt-C` | cd into a folder (with a tree preview) |
-| `Tab` | completion menu with fuzzy search (fzf-tab) |
-| `**<Tab>` | fuzzy path completion, e.g. `nvim **<Tab>` |
+| Keys      | Does                                        |
+| --------- | ------------------------------------------- |
+| `Ctrl-R`  | fuzzy-search your command history           |
+| `Ctrl-T`  | insert a file path (with a bat preview)     |
+| `Alt-C`   | cd into a folder (with a tree preview)      |
+| `Tab`     | completion menu with fuzzy search (fzf-tab) |
+| `**<Tab>` | fuzzy path completion, e.g. `nvim **<Tab>`  |
 
 ## Git and GitHub
 
@@ -219,16 +219,16 @@ tldr tar                 # the common invocations, without reading the man page
 
 Prefix is `Ctrl-Space`.
 
-| Keys | Does |
-| --- | --- |
-| prefix `v` / `b` | split side by side / top and bottom (in the current folder) |
-| prefix `c` | new window |
-| `Ctrl-h/j/k/l` | move between tmux panes and Neovim splits |
-| `Alt-←/→/↑/↓` | move between panes |
-| `Shift-←/→`, `Alt-H/L` | previous / next window |
-| prefix `Ctrl-k` | clear the screen and scrollback |
-| prefix `r` | reload the tmux config |
-| prefix `[` | scroll / copy mode: `v` select, `y` copy, `q` quit |
+| Keys                   | Does                                                        |
+| ---------------------- | ----------------------------------------------------------- |
+| prefix `v` / `b`       | split side by side / top and bottom (in the current folder) |
+| prefix `c`             | new window                                                  |
+| `Ctrl-h/j/k/l`         | move between tmux panes and Neovim splits                   |
+| `Alt-←/→/↑/↓`          | move between panes                                          |
+| `Shift-←/→`, `Alt-H/L` | previous / next window                                      |
+| prefix `Ctrl-k`        | clear the screen and scrollback                             |
+| prefix `r`             | reload the tmux config                                      |
+| prefix `[`             | scroll / copy mode: `v` select, `y` copy, `q` quit          |
 
 Windows are named after the folder (at the shell) or the running program.
 
@@ -236,25 +236,39 @@ Windows are named after the folder (at the shell) or the running program.
 
 `<Space>` is the leader key; press it and wait to see every option.
 
-| Keys | Does |
-| --- | --- |
-| `<Space>ff` / `<Space><Space>` | find files (hidden files included) |
-| `<Space>sg` | search text in the project |
-| `<Space>e` | file explorer |
-| `<Space>gg` | lazygit inside Neovim |
-| `gd` / `gr` / `K` | go to definition / references / documentation |
-| `<Space>ca` / `<Space>cr` | code actions / rename |
-| `<Space>cf` | format the file |
-| `<Space>uC` | try a different colour scheme |
-| `<Space>aa` | AI chat (local Ollama model) |
-| `\ll` / `\lv` | LaTeX: compile continuously / jump to the PDF |
-| `<Space>oo` / `<Space>os` | Obsidian: find a note / search all notes |
-| `<Space>od` / `<Space>on` | Obsidian: today's note (in `Journal/`) / new note |
-| `<Space>ob` / `<Space>ot` | Obsidian: backlinks / tags; `Enter` on a `[[link]]` follows it |
-| `<Space>ol` / `<Space>ow` | Obsidian: links in this note / switch vault |
+| Keys                           | Does                                                           |
+| ------------------------------ | -------------------------------------------------------------- |
+| `<Space>ff` / `<Space><Space>` | find files (hidden files included)                             |
+| `<Space>sg`                    | search text in the project                                     |
+| `<Space>e`                     | file explorer                                                  |
+| `<Space>gg`                    | lazygit inside Neovim                                          |
+| `gd` / `gr` / `K`              | go to definition / references / documentation                  |
+| `<Space>ca` / `<Space>cr`      | code actions / rename                                          |
+| `<Space>cf`                    | format the file                                                |
+| `<Space>uC`                    | try a different colour scheme                                  |
+| `<Space>aa`                    | AI chat (local Ollama model)                                   |
+| `\ll` / `\lv`                  | LaTeX: compile continuously / jump to the PDF                  |
+| `<Space>oo` / `<Space>os`      | Obsidian: find a note / search all notes                       |
+| `<Space>od` / `<Space>on`      | Obsidian: today's note (in `Journal/`) / new note              |
+| `<Space>ob` / `<Space>ot`      | Obsidian: backlinks / tags; `Enter` on a `[[link]]` follows it |
+| `<Space>ol` / `<Space>ow`      | Obsidian: links in this note / switch vault                    |
 
 `:Lazy` manages plugins, `:Mason` language servers and formatters,
 `:checkhealth` diagnoses problems.
+
+## VS Code
+
+VS Code runs your real Neovim for editing (vscode-neovim with LazyVim's
+vscode extra), so `<Space>` keys, motions and options are the same as in the
+terminal; VS Code keeps its own UI, debugger and extensions.
+
+- Settings and keybindings are files in the repo (`vscode/`); changing a
+  setting in VS Code edits the repo, so commit it with `dots`.
+- Add an extension: install it, then add its ID (shown on the extension page)
+  to `vscode/extensions.txt`. `./bootstrap.sh prune` lists installed extensions
+  that aren't in the file.
+- Language support matches Neovim: Ruff for Python, clangd for C/C++, Gruvbox
+  as the theme.
 
 ## Toolchains
 
