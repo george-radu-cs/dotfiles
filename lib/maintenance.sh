@@ -14,10 +14,14 @@ _doc_head() { printf '\n%s%s%s\n' "$_c_bold" "$*" "$_c_reset"; }
 
 _mise_bin() { command -v mise || echo "$HOME/.local/bin/mise"; }
 
+# On Linux, mise also manages the CLI tools in config.linux.toml.
+_mise_env() { if is_linux; then export MISE_ENV=linux; fi; }
+
 # --- doctor --------------------------------------------------------------------
 
 doctor() {
   export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+  _mise_env
 
   _doc_head "Links"
   local missing
@@ -74,8 +78,8 @@ doctor() {
   local tool dup=0 copies
   for tool in node npm python3 java go nvim docker pdflatex latexmk; do
     # mise's own copies and the OS's built-in ones (/usr/bin, /bin) don't count.
-    copies=$(which -a "$tool" 2>/dev/null | grep -v -E '/mise/(shims|installs)/|^/usr/bin/|^/bin/' | awk '!seen[$0]++')
-    if (( $(printf '%s' "$copies" | grep -c .) > 1 )); then
+    copies=$(which -a "$tool" 2>/dev/null | grep -v -E '/mise/(shims|installs)/|^/usr/bin/|^/bin/' | awk '!seen[$0]++' || true)
+    if (( $(printf '%s' "$copies" | grep -c . || true) > 1 )); then
       _doc_warn "$tool has several copies: $(printf '%s' "$copies" | tr '\n' ' ')"; dup=1
     fi
   done
@@ -117,6 +121,7 @@ doctor() {
 
 update_all() {
   export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+  _mise_env
   _UPDATE_RESULTS=()
   case $DOTFILES_OS in
     macos)  _upd "Homebrew"       run sh -c 'brew update && brew upgrade' ;;
@@ -242,6 +247,7 @@ prune() {
   fi
   local mise unused=() line
   mise=$(_mise_bin)
+  _mise_env
   while IFS= read -r line; do [[ -n $line ]] && unused+=("$line"); done \
     < <("$mise" prune --dry-run 2>&1 | grep -o 'mise [^ ]* is prunable' | awk '{ print $2 }' | sort -u || true)
   if [[ ${#unused[@]} -gt 0 ]]; then
