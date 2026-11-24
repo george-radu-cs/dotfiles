@@ -44,6 +44,11 @@ brew "lazydocker"
 brew "gh"
 brew "opentofu"          # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- databases & security ----------------------------------------------------
+brew "pgcli"             # PostgreSQL shell with completion and highlighting
+brew "mycli"             # MySQL shell, same idea
+brew "trivy"             # vulnerability scanner for images, filesystems, dependencies
+
 # --- disk & benchmarks --------------------------------------------------------
 brew "dust"              # du
 brew "duf"               # df

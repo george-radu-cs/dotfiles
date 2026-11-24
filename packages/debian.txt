@@ -27,6 +27,8 @@ flatpak               # desktop apps from Flathub (packages/flatpak.txt)
 
 wrk                   # HTTP benchmarking (oha and k6 come from mise)
 
+libpq5                # for pgcli
+
 # Lua (LuaJIT is what Neovim embeds)
 lua5.4
 luajit

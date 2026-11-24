@@ -24,6 +24,8 @@ luarocks
 openssl-devel         # to build wrk (not packaged on Fedora)
 perl-core
 
+libpq                 # for pgcli
+
 # Lua (LuaJIT is what Neovim embeds)
 lua
 luajit

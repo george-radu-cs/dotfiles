@@ -30,6 +30,11 @@ lazydocker = "latest"
 gh = "latest"
 opentofu = "latest"         # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- databases & security ----------------------------------------------------
+"pipx:pgcli" = "latest"     # PostgreSQL shell (needs libpq from the distro packages)
+"pipx:mycli" = "latest"     # MySQL shell
+trivy = "latest"            # vulnerability scanner
+
 # --- disk & benchmarks -------------------------------------------------------
 dust = "latest"             # du
 duf = "latest"              # df
