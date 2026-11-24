@@ -4,6 +4,20 @@ What this setup gives you on the command line, what each tool replaces, the
 commands worth knowing, and workflows that combine them. Everything here is
 installed by `./bootstrap.sh install`.
 
+## New in this setup
+
+The tools added most recently, each explained further down:
+
+| Tool | Try |
+| --- | --- |
+| difftastic | `git dft` — the current diff, compared by code structure |
+| lazydocker | `lazydocker` — containers, logs and Compose stacks in one view |
+| dust / duf | `dust` — what fills this folder; `duf` — free space per disk |
+| hyperfine | `hyperfine 'zsh -i -c exit'` — benchmark any command |
+| oha / wrk / k6 | `oha -z 10s http://localhost:8080` — load-test an HTTP service |
+| OpenTofu | `tofu init && tofu plan` — open-source Terraform |
+| Flutter, Zig, Go, TypeScript | managed by mise, like Java, Node and Python |
+
 ## At a glance
 
 | Instead of | Use | Why |
@@ -77,6 +91,7 @@ dots              # lazygit in this dotfiles repo, from anywhere
 git diff / show   # delta draws these automatically; n / N jump between files
 git dft           # same diff, by difftastic: compares code structure, ignores reformatting
 git dshow HEAD    # last commit, structurally;  git dlog -3 for the last three
+difft a.py b.py   # compare any two files with difftastic
 gh pr list        # open pull requests;  gh pr checkout 12;  gh pr create
 gh repo view -w   # open the current repo in the browser
 ```
@@ -217,18 +232,37 @@ Windows are named after the folder (at the shell) or the running program.
 
 ## Toolchains
 
+mise installs the languages (Java 11–25, Node, Bun, Python with uv and IPython,
+Go, TypeScript, Zig, Flutter/Dart); Rust comes from rustup.
+
 ```sh
 java17 / java21 / java25        # switch the JDK in this shell
 mise use node@22                # pin a version for the current project (writes mise.toml)
 mise ls                         # what is installed and active
 ipython                         # interactive Python
+uv init && uv add requests      # Python project with dependencies (uv replaces pip/venv)
+flutter create app && cd app    # new Flutter project (dart comes with Flutter)
+zig run main.zig                # build and run a Zig file
+tsc --init                      # TypeScript config for a project
 ```
+
+## Infrastructure
+
+```sh
+tofu init                       # OpenTofu (open-source Terraform): download providers
+tofu plan / tofu apply          # preview / apply changes;  tofu fmt formats .tf files
+```
+
+Neovim uses OpenTofu for Terraform files too (validation and formatting).
 
 ## Looking after the setup
 
 ```sh
 ./bootstrap.sh doctor           # health report with fixes
 ./bootstrap.sh update           # upgrade everything
+./bootstrap.sh prune            # list packages the repo no longer manages (-y removes them)
+./bootstrap.sh kde-save         # Linux: save this machine's KDE Plasma settings into the repo
+./bootstrap.sh help <command>   # details for any command
 theme kanagawa-wave             # switch the colour theme everywhere (theme alone lists them)
 zbench                          # how fast the shell starts
 ```
