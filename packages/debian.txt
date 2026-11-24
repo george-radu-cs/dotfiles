@@ -1,5 +1,5 @@
 # Debian / Ubuntu (apt). Debian stable ships old CLI tools (e.g. neovim), which
-# is why those come from mise instead. WezTerm and Docker repos are added by
+# is why CLI tools come from mise instead. WezTerm and Docker repos are added by
 # the bootstrap scripts.
 
 # base

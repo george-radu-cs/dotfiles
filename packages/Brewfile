@@ -1,5 +1,6 @@
 # macOS core packages: `brew bundle --file packages/Brewfile`
-# Language runtimes (java, node, bun, go, python) come from mise, not brew.
+# Languages and CLI tools (neovim, fzf, go, …) come from mise, the same on every
+# OS (home/mise/.config/mise/config.toml). This file keeps the rest.
 # Optional/occasional tools live in Brewfile.extra (bootstrap --extra).
 
 # --- shell & terminal ------------------------------------------------------
@@ -12,35 +13,14 @@ brew "coreutils"
 brew "curl"
 brew "wget"
 brew "tmux"
-brew "neovim"
 brew "vim"
-brew "starship"
 brew "mise"
-brew "fzf"
-brew "ripgrep"
-brew "fd"
-brew "bat"
-brew "eza"
-brew "zoxide"
-brew "git-delta"
-brew "lazygit"
-brew "gh"
-brew "jq"
-brew "yazi"
-brew "tealdeer"
 brew "btop"
-brew "fastfetch"
 brew "tree"
-brew "tree-sitter-cli"   # nvim-treesitter compiles parsers with it
 brew "luarocks"          # some LazyVim plugins build rocks
-brew "shellcheck"        # lint shell scripts (bootstrap, lib/)
-brew "stylua"            # format Lua (nvim config)
 
 # --- languages -----------------------------------------------------------------
-# java/node/bun/python come from mise (home/mise/.config/mise/config.toml).
 # Rust comes from the official rustup installer (lib/toolchains.sh), not brew.
-brew "go"
-brew "typescript"        # tsc (pulls brew node as a dependency; mise's node wins on PATH)
 brew "lua"
 brew "luajit"            # what Neovim embeds
 

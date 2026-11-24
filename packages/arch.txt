@@ -1,5 +1,5 @@
-# Arch (pacman). CLI tools such as starship/eza/lazygit come from mise
-# (home/mise/.config/mise/config.linux.toml) so every distro gets the same versions.
+# Arch (pacman). Languages and CLI tools (neovim, starship, …) come from mise
+# (home/mise/.config/mise/config.toml), the same on every OS.
 
 # base
 base-devel

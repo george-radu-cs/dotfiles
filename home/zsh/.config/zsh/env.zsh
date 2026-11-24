@@ -28,7 +28,6 @@ if [[ $OSTYPE == darwin* ]]; then
   export ANDROID_HOME="$HOME/Library/Android/sdk"
 else
   export ANDROID_HOME="$HOME/Android/Sdk"
-  export MISE_ENV=linux   # loads ~/.config/mise/config.linux.toml (CLI tools)
 fi
 
 # --- PATH: personal bins first, then anything that exists ----------------------
@@ -42,7 +41,6 @@ path=(
   $GOPATH/bin(N-/)
   $HOME/.bun/bin(N-/)
   $HOME/.pub-cache/bin(N-/)
-  $HOME/development/flutter/bin(N-/)
   $HOME/.ghcup/bin(N-/)
   $ANDROID_HOME/emulator(N-/)
   $ANDROID_HOME/platform-tools(N-/)

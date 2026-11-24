@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 # Language toolchains.
-#   mise   → java (11/17/21/25), node, bun, python, uv  (+ Go, TypeScript, CLI tools on Linux)
+#   mise   → every language and CLI tool in ~/.config/mise/config.toml (all OS)
 #   rustup → rust stable + cargo, clippy, rustfmt, rust-analyzer (official
 #            installer from rust-lang.org on every OS; updates: rustup update)
 #   C/C++, Lua → system packages step
@@ -8,7 +8,7 @@
 _mise() {
   local bin
   bin=$(command -v mise || echo "$HOME/.local/bin/mise")
-  if is_linux; then MISE_ENV=linux run "$bin" "$@"; else run "$bin" "$@"; fi
+  run "$bin" "$@"
 }
 
 install_toolchains() {
@@ -31,7 +31,6 @@ _install_mise_tools() {
   fi
   local bin missing
   bin=$(command -v mise || echo "$HOME/.local/bin/mise")
-  is_linux && export MISE_ENV=linux
   "$bin" trust --yes --all >/dev/null 2>&1 || true
   missing=$("$bin" ls 2>/dev/null | awk '/\(missing\)/ { print $1 }' | sort -u | tr '\n' ' ')
 
