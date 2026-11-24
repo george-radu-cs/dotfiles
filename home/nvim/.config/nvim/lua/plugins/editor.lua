@@ -1,8 +1,8 @@
 return {
-  -- <leader>ff / <leader><space> also list dotfiles (.zshenv, .config/…).
-  -- These are per-source options; a top-level `picker.hidden` means something
-  -- else in snacks (which picker windows to hide), so it had no effect.
-  -- Inside the picker: <a-h> toggles hidden files, <a-i> gitignored ones.
+  -- Dotfiles (.zshenv, .config/…) are visible in <leader>ff / <leader><space>
+  -- and in the file tree (<leader>e). These are per-source options; a top-level
+  -- `picker.hidden` means something else in snacks (which picker windows to
+  -- hide). Toggle in the picker: <a-h> hidden, <a-i> gitignored; in the tree: H, I.
   {
     "folke/snacks.nvim",
     opts = {
@@ -12,6 +12,11 @@ return {
             hidden = true,
             ignored = false, -- keep node_modules, build output etc. out
             exclude = { ".git" },
+          },
+          explorer = {
+            hidden = true,
+            ignored = false,
+            exclude = { ".git", ".DS_Store" },
           },
         },
       },
