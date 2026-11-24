@@ -16,7 +16,7 @@ directly.
 | Shell | zsh, [antidote](https://github.com/mattmc3/antidote) (selected oh-my-zsh plugins), [Starship](https://starship.rs) |
 | Terminal | [WezTerm](https://wezterm.org), tmux, JetBrainsMono Nerd Font |
 | Editor | Neovim with [LazyVim](https://www.lazyvim.org) |
-| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython · official [rustup](https://rustup.rs) · Go, TypeScript, Lua · C/C++ (clang, CMake, Ninja) |
+| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Zig, OpenTofu · official [rustup](https://rustup.rs) · Go, TypeScript, Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, lazygit, yazi, gh, btop, fastfetch |
