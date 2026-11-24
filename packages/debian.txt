@@ -25,6 +25,7 @@ luarocks
 
 flatpak               # desktop apps from Flathub (packages/flatpak.txt)
 
+wrk                   # HTTP benchmarking (oha and k6 come from mise)
 
 # Lua (LuaJIT is what Neovim embeds)
 lua5.4

@@ -8,7 +8,7 @@ install_packages() {
     fedora) _packages_fedora ;;
     debian) _packages_debian ;;
   esac
-  if is_linux; then _install_mise_linux; install_flatpaks; fi
+  if is_linux; then _install_mise_linux; _install_wrk_linux; install_flatpaks; fi
 }
 
 # --- macOS -------------------------------------------------------------------
@@ -145,4 +145,23 @@ _install_mise_linux() {
     curl -fsSL https://mise.run | MISE_QUIET=1 sh
   fi
   ok "mise installed"
+}
+
+# wrk (HTTP benchmarking): Debian packages it (packages/debian.txt); Arch only
+# has it in the AUR and Fedora not at all, and upstream publishes source only,
+# so build the pinned release there into ~/.local/bin.
+WRK_VERSION="${WRK_VERSION:-4.2.0}"
+_install_wrk_linux() {
+  has wrk && { ok "wrk present"; return 0; }
+  [[ $DOTFILES_OS == debian ]] && return 0
+  info "building wrk $WRK_VERSION from source…"
+  local src="$XDG_CACHE_HOME/dotfiles/wrk-$WRK_VERSION"
+  run rm -rf "$src"
+  run git clone --quiet --depth 1 --branch "$WRK_VERSION" https://github.com/wg/wrk.git "$src"
+  if run make -C "$src" -j"$(nproc 2>/dev/null || echo 2)" >/dev/null 2>&1; then
+    run install -m 0755 "$src/wrk" "$HOME/.local/bin/wrk"
+    ok "wrk $WRK_VERSION built into ~/.local/bin"
+  else
+    warn "wrk build failed — see: make -C $(tilde "$src")"
+  fi
 }

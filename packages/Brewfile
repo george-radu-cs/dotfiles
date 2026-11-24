@@ -38,10 +38,19 @@ brew "stylua"
 
 # --- git & containers ---------------------------------------------------------
 brew "git-delta"
+brew "difftastic"        # structural diffs: git dft / git dlog
 brew "lazygit"
+brew "lazydocker"
 brew "gh"
 brew "opentofu"          # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- disk & benchmarks --------------------------------------------------------
+brew "dust"              # du
+brew "duf"               # df
+brew "hyperfine"         # benchmark commands
+brew "oha"               # HTTP load testing, live view
+brew "wrk"               # HTTP load testing, maximum throughput
+brew "k6"                # scripted load tests
 
 # --- languages -----------------------------------------------------------------
 # Rust comes from the official rustup installer (lib/toolchains.sh), not brew.

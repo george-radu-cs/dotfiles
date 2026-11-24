@@ -21,6 +21,7 @@ wl-clipboard
 xclip
 luarocks
 
+openssl-devel         # to build wrk (not packaged on Fedora)
 perl-core
 
 # Lua (LuaJIT is what Neovim embeds)

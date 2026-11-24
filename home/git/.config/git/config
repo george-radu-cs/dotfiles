@@ -43,6 +43,10 @@
 [alias]
 	mr = !sh -c 'git fetch $1 merge-requests/$2/head:mr-$1-$2 && git checkout mr-$1-$2' -
 	forcepush = push --force-with-lease --force-if-includes
+	# difftastic (structural diffs) on demand; delta stays the default pager
+	dft = -c diff.external=difft diff
+	dshow = -c diff.external=difft show --ext-diff
+	dlog = -c diff.external=difft log -p --ext-diff
 	lg = log --graph --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %s %C(dim)(%cr)%Creset%C(auto)%d'
 
 # Machine/work specific (untracked): includeIf rules, signing keys, credentials.

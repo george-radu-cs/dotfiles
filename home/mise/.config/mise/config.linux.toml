@@ -24,7 +24,15 @@ stylua = "latest"
 
 # --- git & containers --------------------------------------------------------
 delta = "latest"
+difftastic = "latest"       # structural diffs: git dft / git dlog
 lazygit = "latest"
+lazydocker = "latest"
 gh = "latest"
 opentofu = "latest"         # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- disk & benchmarks -------------------------------------------------------
+dust = "latest"             # du
+duf = "latest"              # df
+hyperfine = "latest"        # benchmark commands
+oha = "latest"              # HTTP load testing (wrk comes from the distro packages)
+k6 = "latest"               # scripted load tests

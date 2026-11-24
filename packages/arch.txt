@@ -25,6 +25,7 @@ mise
 
 flatpak               # desktop apps from Flathub (packages/flatpak.txt)
 
+openssl               # to build wrk (only in the AUR on Arch)
 
 # Lua (LuaJIT is what Neovim embeds)
 lua
