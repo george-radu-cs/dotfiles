@@ -138,13 +138,11 @@ link_all() {
   done
   # An old ~/.gitconfig wins over ~/.config/git/config. Keep its contents as the
   # untracked local override so work includeIf rules etc. survive.
+  # Whether config.local already exists is only known after linking (before,
+  # ~/.config/git may not point into the repo yet), so decide afterwards.
   if [[ -f $HOME/.gitconfig && ! -L $HOME/.gitconfig ]]; then
-    if [[ ! -e $XDG_CONFIG_HOME/git/config.local ]]; then
-      run mkdir -p "$BACKUP_DIR"
-      run cp "$HOME/.gitconfig" "$BACKUP_DIR/.gitconfig"
-      _pending_git_local="$BACKUP_DIR/.gitconfig"
-    fi
     backup "$HOME/.gitconfig"
+    _pending_git_local="$BACKUP_DIR/.gitconfig"
   fi
 
   local pkg
@@ -158,9 +156,15 @@ link_all() {
   fi
 
   if [[ -n ${_pending_git_local:-} ]]; then
-    run cp "$_pending_git_local" "$XDG_CONFIG_HOME/git/config.local"
-    _manifest created "$XDG_CONFIG_HOME/git/config.local"
-    warn "old ~/.gitconfig copied to ~/.config/git/config.local (untracked) — trim what the repo config already sets"
+    local git_local="$XDG_CONFIG_HOME/git/config.local"
+    if [[ -e $git_local ]]; then
+      # Never overwrite an existing config.local (it holds identities and work rules).
+      warn "kept the existing ~/.config/git/config.local; your old ~/.gitconfig is in $(tilde "$_pending_git_local")"
+    else
+      run cp "$_pending_git_local" "$git_local"
+      _manifest created "$git_local"
+      warn "old ~/.gitconfig copied to ~/.config/git/config.local (untracked) — trim what the repo config already sets"
+    fi
   fi
 }
 
