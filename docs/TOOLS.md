@@ -235,9 +235,4 @@ zbench                          # how fast the shell starts
 
 ## Worth adding next
 
-From [IDEAS.md](../IDEAS.md), the ones that fit this setup best:
-
-| Tool | What it adds |
-| --- | --- |
-| **sesh** | one key to jump between projects as tmux sessions |
-| **Syncthing** | keeps the Obsidian vault in sync between the Mac and Linux, without a subscription |
+More candidates are collected in [IDEAS.md](../IDEAS.md).
