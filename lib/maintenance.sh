@@ -74,6 +74,19 @@ doctor() {
 
   # Two installs of the same tool (like Homebrew texlive next to MacTeX) cause
   # hard-to-debug problems.
+  # Flutter / Android: quick checks only (the full `flutter doctor` takes 10-20 s).
+  if has flutter; then
+    _doc_head "Flutter & Android"
+    local dart_v
+    dart_v=$(dart --version 2>&1 | sed -n 's/.*SDK version: \([^ ]*\).*/\1/p' || true)
+    [[ -n $dart_v ]] && _doc_ok "Flutter SDK works (Dart $dart_v)" || _doc_err "flutter is installed but dart does not run — run: flutter doctor"
+    if [[ -x ${ANDROID_HOME:-/nonexistent}/platform-tools/adb ]]; then
+      _doc_ok "Android SDK at $(tilde "$ANDROID_HOME")"
+    else
+      _doc_warn "Android SDK not found at $(tilde "${ANDROID_HOME:-\$ANDROID_HOME}") — only needed for Android builds (install it with Android Studio); details: flutter doctor"
+    fi
+  fi
+
   _doc_head "Duplicates on PATH"
   local tool dup=0 copies
   for tool in node npm python3 java go nvim docker pdflatex latexmk; do
