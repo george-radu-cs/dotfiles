@@ -16,7 +16,7 @@ directly.
 | Shell | zsh, [antidote](https://github.com/mattmc3/antidote) (selected oh-my-zsh plugins), [Starship](https://starship.rs) |
 | Terminal | [WezTerm](https://wezterm.org), tmux, JetBrainsMono Nerd Font |
 | Editor | Neovim with [LazyVim](https://www.lazyvim.org) |
-| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Zig, OpenTofu · official [rustup](https://rustup.rs) · Go, TypeScript, Lua · C/C++ (clang, CMake, Ninja) |
+| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, OpenTofu, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, lazygit, yazi, gh, btop, fastfetch |
@@ -59,7 +59,7 @@ completes commands and options with Tab.
 | --- | --- | --- |
 | `packages` | Homebrew and `packages/Brewfile` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise |
 | `link` | Symlinks every package in `home/` into `$HOME`; existing files are moved to a backup | same |
-| `toolchains` | `mise install`, rustup with clippy, rustfmt and rust-analyzer | same, plus Go, TypeScript and CLI tools from `config.linux.toml` |
+| `toolchains` | `mise install` (languages and CLI tools), rustup with clippy, rustfmt and rust-analyzer | same |
 | `docker` | Verifies Docker Desktop | Docker repository, engine, `/etc/docker/daemon.json`, service, `docker` group |
 | `fonts` | Installed by the Brewfile | JetBrainsMono Nerd Font (pinned release) in `~/.local/share/fonts` |
 | `shell` | Login shell, zsh plugins, tmux plugins, Neovim plugins from `lazy-lock.json`, theme | same |
@@ -81,14 +81,14 @@ with the commands listed under [Maintenance](#maintenance).
 ## Maintenance
 
 ```sh
-brew upgrade            # macOS packages
-mise upgrade            # language toolchains and Linux CLI tools
-rustup update           # Rust
-antidote update         # zsh plugins
+./bootstrap.sh doctor     # health report; suggests a fix for every problem
+./bootstrap.sh update     # upgrade packages, mise tools, Rust, zsh/tmux/Neovim plugins, TeX Live
+./bootstrap.sh prune      # list packages and tool versions the repo no longer manages
+./bootstrap.sh prune -y   # …and remove them
 ```
 
-Neovim plugins are updated from inside Neovim with `:Lazy update`; commit the
-resulting `lazy-lock.json` to keep every machine on the same versions.
+`update` also refreshes Neovim's treesitter parsers and Mason tools. Commit the
+resulting `lazy-lock.json` to keep every machine on the same plugin versions.
 
 ## Backup and restore
 
@@ -135,8 +135,8 @@ To add a configuration, create `home/<name>/` mirroring its location under
 - Rust is installed with the official rustup installer rather than a package
   manager.
 - All JDKs are Eclipse Temurin (Adoptium) builds of OpenJDK: 11, 17, 21 and 25.
-- On Linux, CLI tools come from mise so that every distribution runs the same
-  versions.
+- Languages and CLI tools come from mise on every OS, so macOS and all three
+  distributions run the same versions.
 - LaTeX builds keep auxiliary files in `.build/`; the PDF stays next to the
   source. Defaults live in `~/.config/latexmk/latexmkrc`, and a project's own
   `.latexmkrc` overrides them (e.g. `$pdf_mode = 4;` for LuaLaTeX).

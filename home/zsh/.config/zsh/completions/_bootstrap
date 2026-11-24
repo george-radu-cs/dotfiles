@@ -10,6 +10,9 @@ commands=(
   'docker:Docker Engine (Linux) or check Docker Desktop (macOS)'
   'fonts:JetBrainsMono Nerd Font'
   'shell:login shell, zsh/tmux/Neovim plugins, theme'
+  'doctor:health report with fixes'
+  'update:upgrade packages, toolchains and plugins'
+  'prune:list (or with -y remove) unmanaged packages'
   'backup:copy the current config, change nothing'
   'clean:move leftovers of an old setup into a backup'
   'backups:list backups'
@@ -23,6 +26,7 @@ steps=(packages link toolchains docker fonts shell)
 _arguments -C \
   '(-n --dry-run)'{-n,--dry-run}'[print what would happen, change nothing]' \
   '--extra[also install Brewfile.extra (macOS)]' \
+  '(-y --yes)'{-y,--yes}'[prune: remove the listed items]' \
   '(-h --help)'{-h,--help}'[show help]' \
   '1: :->command' \
   '*:: :->args' && return

@@ -7,7 +7,7 @@ set -euo pipefail
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export DOTFILES
 
-for lib in common link packages toolchains latex docker fonts shell; do
+for lib in common link packages toolchains latex docker fonts shell maintenance; do
   # shellcheck source=/dev/null
   source "$DOTFILES/lib/$lib.sh"
 done
@@ -28,6 +28,11 @@ ${_c_bold}Setup:${_c_reset}
   shell          login shell, zsh/tmux/Neovim plugins, theme
                  Steps can be combined: ./bootstrap.sh link shell
 
+${_c_bold}Maintenance:${_c_reset}
+  doctor         health report: links, packages, toolchains, Neovim, LaTeX, Docker
+  update         upgrade everything: packages, mise, Rust, zsh/tmux/Neovim plugins
+  prune          list what is installed but no longer managed (-y removes it)
+
 ${_c_bold}Backups:${_c_reset}
   backup         copy the current config and shell history, change nothing
   clean          move leftovers of an old setup (zinit, p10k, …) into a backup
@@ -39,6 +44,7 @@ ${_c_bold}Backups:${_c_reset}
 ${_c_bold}Options:${_c_reset}
   -n, --dry-run  print what would happen, change nothing
       --extra    with packages/install on macOS: also install Brewfile.extra
+  -y, --yes      with prune: remove the listed items
   -h, --help     show this help; with a command, help for that command
 
 ${_c_bold}Examples:${_c_reset}
@@ -46,13 +52,15 @@ ${_c_bold}Examples:${_c_reset}
   ./bootstrap.sh backup          snapshot first
   ./bootstrap.sh install         set everything up
   ./bootstrap.sh link            re-link after adding a config
+  ./bootstrap.sh doctor          check that everything is healthy
+  ./bootstrap.sh update          upgrade everything
   ./bootstrap.sh restore         undo the last change
   ./bootstrap.sh help restore    details for one command
 EOF
 }
 
 ALL_STEPS=(packages link toolchains docker fonts shell)
-COMMANDS=(install "${ALL_STEPS[@]}" backup clean backups restore check unlink help)
+COMMANDS=(install "${ALL_STEPS[@]}" doctor update prune backup clean backups restore check unlink help)
 
 # Closest command name (edit distance ≤ 2, or a prefix), for "did you mean".
 suggest() {
@@ -96,8 +104,8 @@ Anything already in the way is moved to ~/.dotfiles-backup/<date>/ (undo with
 ~/.config/git/config.local so machine-specific git settings survive." ;;
     toolchains) text="Install language toolchains, only what is missing.
 
-  mise     tools in ~/.config/mise/config.toml (Java, Node, Bun, Python, uv,
-           IPython) and, on Linux, config.linux.toml (Go, TypeScript, CLI tools)
+  mise     every language and CLI tool in ~/.config/mise/config.toml, the same
+           on every OS (Java, Node, Python, Go, Flutter, Neovim, fzf, …)
   rustup   official installer, stable toolchain, clippy, rustfmt, rust-analyzer
   LaTeX    Perl modules for latexindent; on macOS, Skim set up to jump back to
            Neovim and a working biber on Apple Silicon (TeX Live itself comes
@@ -123,6 +131,22 @@ nvim.bak, neofetch config) into ~/.dotfiles-backup/<date>/. Undo with 'restore'.
 Removes this repo's links, deletes files the bootstrap created, and moves the
 backed-up files back. Whatever is in the way is backed up first, so a restore
 can itself be undone. List backups with: ./bootstrap.sh backups" ;;
+    doctor) text="Read-only health report, with a fix for every problem it finds:
+links, login shell and zsh startup time, missing or outdated packages and mise
+tools, Rust, several copies of the same tool on PATH, Neovim startup warnings
+and broken Mason tools, LaTeX (biber, latexindent) and Docker.
+Exits with 1 when something is broken." ;;
+    update) text="Upgrade everything the repo manages, one step after another:
+  system     Homebrew (macOS) or pacman / dnf / apt (Linux)
+  mise       all tools, and mise itself on Linux
+  rustup     Rust stable
+  plugins    zsh (antidote), tmux (tpm), Neovim (lazy.nvim, then treesitter
+             parsers, then Mason tools)
+  TeX Live   tlmgr on macOS (asks for your password)
+Commit lazy-lock.json afterwards so every machine uses the same plugins." ;;
+    prune) text="List what is installed but no longer managed by the repo:
+Homebrew packages in neither Brewfile (macOS) and mise tool versions no config
+uses. Nothing is removed unless you add -y:  ./bootstrap.sh prune -y" ;;
     check) text="Report every file from home/ that is not linked into \$HOME, or links elsewhere.
 Exits with 1 if something is missing." ;;
     unlink) text="Remove every symlink this repo created. Backups are not touched; use 'restore'
@@ -146,12 +170,15 @@ CMD=""          # first command word, for `<command> --help`
 WANT_HELP=0
 while [[ $# -gt 0 ]]; do
   case $1 in
-    install|packages|link|toolchains|docker|fonts|shell|check|unlink|clean|backup|backups|restore)
+    install|packages|link|toolchains|docker|fonts|shell|doctor|update|prune|check|unlink|clean|backup|backups|restore)
       [[ -z $CMD ]] && CMD=$1 ;;
   esac
   case $1 in
     install)                     MODE="install" ;;
     packages|link|toolchains|docker|fonts|shell) MODE=install; STEPS+=("$1") ;;
+    doctor)                      MODE="doctor" ;;
+    update)                      MODE="update" ;;
+    prune)                       MODE="prune" ;;
     check|--check)               MODE="check" ;;
     unlink|--unlink)             MODE="unlink" ;;
     clean|--clean)               MODE="clean" ;;
@@ -160,7 +187,7 @@ while [[ $# -gt 0 ]]; do
     restore|--restore)           MODE="restore"
                                  if [[ ${2:-} && $2 != -* ]]; then RESTORE_FROM=$2; shift; fi ;;
     -n|--dry-run)                DRY_RUN=1 ;;
-    -y|--yes)                    ASSUME_YES=1 ;;   # accepted for compatibility; nothing prompts
+    -y|--yes)                    ASSUME_YES=1 ;;   # prune: actually remove
     --extra)                     WITH_EXTRA=1 ;;
     -h|--help)                   WANT_HELP=1 ;;
     help)                        if [[ -n ${2:-} && $2 != -* ]]; then command_help "$2"; else usage; fi; exit 0 ;;
@@ -181,7 +208,10 @@ printf '%sdotfiles%s · %s · %s%s\n' "$_c_bold" "$_c_reset" "$(os_pretty)" "$(t
   "$([[ $DRY_RUN == 1 ]] && printf '  %s(dry run: nothing will change)%s' "$_c_yellow" "$_c_reset")"
 
 case $MODE in
-  check)  check_links; exit $? ;;
+  doctor)  doctor; exit $? ;;
+  update)  update_all; exit 0 ;;
+  prune)   prune; exit 0 ;;
+  check)   check_links; exit $? ;;
   unlink)  unlink_all; exit 0 ;;
   backup)  backup_config; exit 0 ;;
   clean)   clean_legacy; info "backups: $(tilde "$BACKUP_DIR")"; exit 0 ;;
