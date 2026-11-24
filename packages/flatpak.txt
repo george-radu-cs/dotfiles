@@ -1,0 +1,5 @@
+# Linux desktop apps from Flathub (installed per user, no sudo).
+# The macOS counterparts come from packages/Brewfile.
+
+md.obsidian.Obsidian        # notes
+com.bitwarden.desktop       # passwords

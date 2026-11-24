@@ -8,7 +8,7 @@ install_packages() {
     fedora) _packages_fedora ;;
     debian) _packages_debian ;;
   esac
-  if is_linux; then _install_mise_linux; fi
+  if is_linux; then _install_mise_linux; install_flatpaks; fi
 }
 
 # --- macOS -------------------------------------------------------------------

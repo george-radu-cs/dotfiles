@@ -7,7 +7,7 @@ set -euo pipefail
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export DOTFILES
 
-for lib in common link packages toolchains latex docker fonts shell maintenance; do
+for lib in common link packages toolchains latex docker fonts shell kde maintenance; do
   # shellcheck source=/dev/null
   source "$DOTFILES/lib/$lib.sh"
 done
@@ -26,12 +26,14 @@ ${_c_bold}Setup:${_c_reset}
   docker         Docker Engine (Linux) / check Docker Desktop (macOS)
   fonts          JetBrainsMono Nerd Font
   shell          login shell, zsh/tmux/Neovim plugins, theme
+  kde            Linux: KDE Plasma settings saved in kde/ (see kde-save)
                  Steps can be combined: ./bootstrap.sh link shell
 
 ${_c_bold}Maintenance:${_c_reset}
   doctor         health report: links, packages, toolchains, Neovim, LaTeX, Docker
   update         upgrade everything: packages, mise, Rust, zsh/tmux/Neovim plugins
   prune          list what is installed but no longer managed (-y removes it)
+  kde-save       Linux: save this machine's KDE Plasma settings into kde/
 
 ${_c_bold}Backups:${_c_reset}
   backup         copy the current config and shell history, change nothing
@@ -59,8 +61,8 @@ ${_c_bold}Examples:${_c_reset}
 EOF
 }
 
-ALL_STEPS=(packages link toolchains docker fonts shell)
-COMMANDS=(install "${ALL_STEPS[@]}" doctor update prune backup clean backups restore check unlink help)
+ALL_STEPS=(packages link toolchains docker fonts shell kde)
+COMMANDS=(install "${ALL_STEPS[@]}" doctor update prune kde-save backup clean backups restore check unlink help)
 
 # Closest command name (edit distance ≤ 2, or a prefix), for "did you mean".
 suggest() {
@@ -147,6 +149,14 @@ Commit lazy-lock.json afterwards so every machine uses the same plugins." ;;
     prune) text="List what is installed but no longer managed by the repo:
 Homebrew packages in neither Brewfile (macOS) and mise tool versions no config
 uses. Nothing is removed unless you add -y:  ./bootstrap.sh prune -y" ;;
+    kde) text="Linux with KDE Plasma: copy the settings saved in kde/ back into ~/.config
+(shortcuts, window manager, keyboard and mouse, theme and fonts, panels).
+Files that differ are backed up first (undo with 'restore'). Log out and back
+in afterwards. Does nothing on macOS or before anything was saved." ;;
+    kde-save) text="Linux with KDE Plasma: copy this machine's Plasma settings into kde/ so the
+'kde' step can apply them on other machines. The files are copied, not linked,
+because Plasma replaces its config files when it saves. Review the result and
+commit it with 'dots'." ;;
     check) text="Report every file from home/ that is not linked into \$HOME, or links elsewhere.
 Exits with 1 if something is missing." ;;
     unlink) text="Remove every symlink this repo created. Backups are not touched; use 'restore'
@@ -170,15 +180,16 @@ CMD=""          # first command word, for `<command> --help`
 WANT_HELP=0
 while [[ $# -gt 0 ]]; do
   case $1 in
-    install|packages|link|toolchains|docker|fonts|shell|doctor|update|prune|check|unlink|clean|backup|backups|restore)
+    install|packages|link|toolchains|docker|fonts|shell|kde|kde-save|doctor|update|prune|check|unlink|clean|backup|backups|restore)
       [[ -z $CMD ]] && CMD=$1 ;;
   esac
   case $1 in
     install)                     MODE="install" ;;
-    packages|link|toolchains|docker|fonts|shell) MODE=install; STEPS+=("$1") ;;
+    packages|link|toolchains|docker|fonts|shell|kde) MODE=install; STEPS+=("$1") ;;
     doctor)                      MODE="doctor" ;;
     update)                      MODE="update" ;;
     prune)                       MODE="prune" ;;
+    kde-save)                    MODE="kde-save" ;;
     check|--check)               MODE="check" ;;
     unlink|--unlink)             MODE="unlink" ;;
     clean|--clean)               MODE="clean" ;;
@@ -211,6 +222,7 @@ case $MODE in
   doctor)  doctor; exit $? ;;
   update)  update_all; exit 0 ;;
   prune)   prune; exit 0 ;;
+  kde-save) kde_save; exit 0 ;;
   check)   check_links; exit $? ;;
   unlink)  unlink_all; exit 0 ;;
   backup)  backup_config; exit 0 ;;
@@ -243,6 +255,7 @@ for s in "${STEPS[@]}"; do
     docker)     stage $n "$total" "Docker";     install_docker ;;
     fonts)      stage $n "$total" "Fonts";      install_fonts ;;
     shell)      stage $n "$total" "Shell";      setup_shell; setup_tmux; setup_nvim; setup_theme ;;
+    kde)        stage $n "$total" "KDE";        kde_apply ;;
   esac
   took=$(human_time $((SECONDS - t0)))
   printf '  %sdone in %s%s\n' "$_c_dim" "$took" "$_c_reset"

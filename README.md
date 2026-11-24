@@ -50,19 +50,20 @@ Line Tools. Accept, then run the clone again.
 
 ### What the bootstrap does
 
-`./bootstrap.sh install` runs six steps in order. Each step can also be run on
+`./bootstrap.sh install` runs seven steps in order. Each step can also be run on
 its own, for example `./bootstrap.sh link`, and every step is safe to re-run.
 `./bootstrap.sh help <command>` explains any command in detail, and zsh
 completes commands and options with Tab.
 
 | Step | macOS | Linux |
 | --- | --- | --- |
-| `packages` | Homebrew and `packages/Brewfile` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise |
+| `packages` | Homebrew and `packages/Brewfile` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise, desktop apps from Flathub (`packages/flatpak.txt`) |
 | `link` | Symlinks every package in `home/` into `$HOME`; existing files are moved to a backup | same |
 | `toolchains` | `mise install` (languages and CLI tools), rustup with clippy, rustfmt and rust-analyzer | same |
 | `docker` | Verifies Docker Desktop | Docker repository, engine, `/etc/docker/daemon.json`, service, `docker` group |
 | `fonts` | Installed by the Brewfile | JetBrainsMono Nerd Font (pinned release) in `~/.local/share/fonts` |
 | `shell` | Login shell, zsh plugins, tmux plugins, Neovim plugins from `lazy-lock.json`, theme | same |
+| `kde` | nothing | KDE Plasma settings saved in `kde/` (shortcuts, window manager, keyboard, theme, panels) |
 
 Installed packages are not upgraded by the bootstrap. Upgrade deliberately
 with the commands listed under [Maintenance](#maintenance).
@@ -89,6 +90,19 @@ with the commands listed under [Maintenance](#maintenance).
 
 `update` also refreshes Neovim's treesitter parsers and Mason tools. Commit the
 resulting `lazy-lock.json` to keep every machine on the same plugin versions.
+
+## KDE Plasma
+
+Plasma settings are copied rather than linked, because Plasma replaces its
+config files when it saves them.
+
+```sh
+./bootstrap.sh kde-save   # on a configured machine: copy its Plasma settings into kde/
+./bootstrap.sh kde        # on another machine: apply them (log out and in afterwards)
+```
+
+`theme <name>` also generates a matching Plasma colour scheme and applies it
+in a Plasma session.
 
 ## Backup and restore
 

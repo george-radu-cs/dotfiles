@@ -10,9 +10,11 @@ commands=(
   'docker:Docker Engine (Linux) or check Docker Desktop (macOS)'
   'fonts:JetBrainsMono Nerd Font'
   'shell:login shell, zsh/tmux/Neovim plugins, theme'
+  'kde:apply the KDE Plasma settings saved in kde/ (Linux)'
   'doctor:health report with fixes'
   'update:upgrade packages, toolchains and plugins'
   'prune:list (or with -y remove) unmanaged packages'
+  'kde-save:save the KDE Plasma settings of this machine into kde/ (Linux)'
   'backup:copy the current config, change nothing'
   'clean:move leftovers of an old setup into a backup'
   'backups:list backups'
@@ -21,7 +23,7 @@ commands=(
   'unlink:remove every link this repo created'
   'help:show help for a command'
 )
-steps=(packages link toolchains docker fonts shell)
+steps=(packages link toolchains docker fonts shell kde)
 
 _arguments -C \
   '(-n --dry-run)'{-n,--dry-run}'[print what would happen, change nothing]' \
@@ -41,7 +43,7 @@ case $state in
       restore)
         backups=(${HOME}/.dotfiles-backup/*(N/:t))
         _describe -t backups 'backup' backups ;;
-      packages|link|toolchains|docker|fonts|shell)
+      packages|link|toolchains|docker|fonts|shell|kde)
         _describe -t steps 'step' steps ;;
     esac
     _arguments \

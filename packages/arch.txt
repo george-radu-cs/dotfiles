@@ -22,6 +22,8 @@ xclip
 luarocks
 mise
 
+flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
 # Lua (LuaJIT is what Neovim embeds)
 lua
 luajit

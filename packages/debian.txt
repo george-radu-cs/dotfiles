@@ -23,6 +23,8 @@ wl-clipboard
 xclip
 luarocks
 
+flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
 # Lua (LuaJIT is what Neovim embeds)
 lua5.4
 luajit
