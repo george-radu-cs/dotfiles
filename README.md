@@ -15,12 +15,13 @@ directly.
 | --- | --- |
 | Shell | zsh, [antidote](https://github.com/mattmc3/antidote) (selected oh-my-zsh plugins), [Starship](https://starship.rs) |
 | Terminal | [WezTerm](https://wezterm.org), tmux, JetBrainsMono Nerd Font |
-| Editor | Neovim with [LazyVim](https://www.lazyvim.org) |
+| Editor | Neovim with [LazyVim](https://www.lazyvim.org); Obsidian vaults via obsidian.nvim |
 | Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, difftastic, lazygit, lazydocker, yazi, gh, btop, dust, duf, fastfetch, OpenTofu |
 | Benchmarks | hyperfine (commands), oha, wrk and k6 (HTTP load) |
+| Databases & security | pgcli, mycli, trivy |
 | Theme | Gruvbox dark (hard) by default; Gruvbox light (hard); Kanagawa wave, dragon and lotus |
 
 ## Requirements

@@ -16,6 +16,9 @@ The tools added most recently, each explained further down:
 | hyperfine | `hyperfine 'zsh -i -c exit'` — benchmark any command |
 | oha / wrk / k6 | `oha -z 10s http://localhost:8080` — load-test an HTTP service |
 | OpenTofu | `tofu init && tofu plan` — open-source Terraform |
+| pgcli / mycli | `pgcli postgres://localhost/app` — database shells with completion |
+| trivy | `trivy image nginx:latest` — find known vulnerabilities |
+| obsidian.nvim | open a note in `~/Obsidian/…`, then `<Space>oo` — your vault in Neovim |
 | Flutter, Zig, Go, TypeScript | managed by mise, like Java, Node and Python |
 
 ## At a glance
@@ -104,6 +107,25 @@ dc up -d          # docker compose (alias dc)
 dust              # what's using space under the current folder, biggest first
 dust -d 2 ~       # two levels deep from your home folder
 duf               # all disks: size, used, free
+```
+
+## Databases
+
+```sh
+pgcli postgres://user@localhost:5432/app     # PostgreSQL: completes tables and columns as you type
+mycli -u root -h localhost app               # MySQL / MariaDB, same idea
+```
+
+Inside both: `\dt` / `SHOW TABLES` as usual, `F3` toggles multi-line mode,
+results page through the pager.
+
+## Security scanning
+
+```sh
+trivy image myapp:latest        # vulnerabilities in a Docker image (OS packages and libraries)
+trivy fs .                      # dependencies of the project in this folder
+trivy config .                  # misconfigurations in Dockerfiles, Kubernetes YAML, Terraform
+trivy image --severity HIGH,CRITICAL myapp:latest   # only the serious ones
 ```
 
 ## Benchmarking
@@ -226,6 +248,9 @@ Windows are named after the folder (at the shell) or the running program.
 | `<Space>uC` | try a different colour scheme |
 | `<Space>aa` | AI chat (local Ollama model) |
 | `\ll` / `\lv` | LaTeX: compile continuously / jump to the PDF |
+| `<Space>oo` / `<Space>os` | Obsidian: find a note / search all notes |
+| `<Space>od` / `<Space>on` | Obsidian: today's note (in `Journal/`) / new note |
+| `<Space>ob` / `<Space>ot` | Obsidian: backlinks / tags; `Enter` on a `[[link]]` follows it |
 
 `:Lazy` manages plugins, `:Mason` language servers and formatters,
 `:checkhealth` diagnoses problems.
