@@ -41,7 +41,7 @@ _docker_repo_debian() {
     fetch "https://download.docker.com/linux/$distro/gpg" /tmp/docker.asc
     as_root install -m 0644 /tmp/docker.asc /etc/apt/keyrings/docker.asc
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$distro $codename stable" \
-      | as_root tee /etc/apt/sources.list.d/docker.list >/dev/null
+      | root_write /etc/apt/sources.list.d/docker.list
     as_root apt-get update -qq
   fi
   as_root apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin

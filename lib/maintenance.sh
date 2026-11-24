@@ -32,7 +32,8 @@ doctor() {
   _doc_head "Shell"
   if [[ $(basename "${SHELL:-}") == zsh ]]; then _doc_ok "login shell is zsh"; else _doc_warn "login shell is ${SHELL:-unknown}, not zsh"; fi
   local ms
-  ms=$( { /usr/bin/time -p zsh -i -c exit >/dev/null; } 2>&1 | awk '/real/ { printf "%d", $2 * 1000 }')
+  # Timed by zsh itself: /usr/bin/time isn't installed everywhere (e.g. Debian).
+  ms=$(zsh -c 'zmodload zsh/datetime; t=$EPOCHREALTIME; zsh -i -c exit >/dev/null 2>&1; printf "%.0f" $(( (EPOCHREALTIME - t) * 1000 ))' 2>/dev/null || true)
   if (( ${ms:-9999} < 300 )); then _doc_ok "zsh starts in ${ms} ms"; else _doc_warn "zsh starts in ${ms:-?} ms (profile with: ZPROF=1 zsh -i -c exit)"; fi
 
   _doc_head "Packages"

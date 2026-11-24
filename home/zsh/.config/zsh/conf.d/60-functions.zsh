@@ -24,8 +24,13 @@ y() {
   rm -f -- "$tmp"
 }
 
-# Startup time, 10 runs.
+# Startup time, 10 runs (timed by zsh itself; /usr/bin/time isn't everywhere).
 zbench() {
-  local i
-  for i in {1..10}; do /usr/bin/time zsh -i -c exit; done 2>&1 | awk '/real/ {print $1 "s"}'
+  zmodload zsh/datetime
+  local i t
+  for i in {1..10}; do
+    t=$EPOCHREALTIME
+    zsh -i -c exit >/dev/null 2>&1
+    printf '%.3fs\n' $(( EPOCHREALTIME - t ))
+  done
 }

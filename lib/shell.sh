@@ -10,12 +10,16 @@ setup_shell() {
 
   if [[ ${SHELL:-} != "$zsh_path" && $(basename "${SHELL:-}") != zsh ]]; then
     if ! grep -qx "$zsh_path" /etc/shells; then
-      echo "$zsh_path" | as_root tee -a /etc/shells >/dev/null
+      echo "$zsh_path" | root_write /etc/shells -a
     fi
     if [[ $EUID -eq 0 ]]; then
       warn "running as root — skipped chsh"
     else
-      run chsh -s "$zsh_path" && ok "login shell → $zsh_path (takes effect on next login)"
+      if as_root chsh -s "$zsh_path" "$USER"; then
+        ok "login shell → $zsh_path (takes effect on next login)"
+      else
+        warn "could not change the login shell — run: chsh -s $zsh_path"
+      fi
     fi
   else
     ok "login shell is zsh"

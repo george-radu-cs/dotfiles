@@ -225,7 +225,7 @@ case $MODE in
   prune)   prune; exit 0 ;;
   kde-save) kde_save; exit 0 ;;
   check)   check_links; exit $? ;;
-  unlink)  unlink_all; unlink_vscode; exit 0 ;;
+  unlink)  unlink_all; exit 0 ;;
   backup)  backup_config; exit 0 ;;
   clean)   clean_legacy; info "backups: $(tilde "$BACKUP_DIR")"; exit 0 ;;
   backups)

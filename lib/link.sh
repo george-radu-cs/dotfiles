@@ -168,6 +168,7 @@ unlink_all() {
   has stow || die "GNU stow is not installed"
   local pkg
   for pkg in "${LINK_PACKAGES[@]}"; do unlink_package "$pkg"; done
+  if declare -F unlink_vscode >/dev/null; then unlink_vscode; fi
 }
 
 # Move old-setup leftovers (CLEAN_PATHS) into a backup folder.
@@ -211,6 +212,11 @@ _managed_paths() {
   local pkg
   for pkg in "${LINK_PACKAGES[@]}"; do _pkg_paths "$DOTFILES/home/$pkg" ""; done
   printf '%s\n' "${LEGACY_FILES[@]}" .gitconfig .zsh_history .local/state/zsh/history
+  if declare -F vscode_user_dir >/dev/null; then
+    local dir f
+    dir=$(vscode_user_dir)
+    for f in "${VSCODE_FILES[@]}"; do printf '%s\n' "${dir#"$HOME"/}/$f"; done
+  fi
 }
 
 # Snapshot the current config without touching it. Linked files are stored with
@@ -290,6 +296,13 @@ check_links() {
       fi
     done < <(find "$src" -type f ! -name .DS_Store -print0)
   done
+  if declare -F vscode_user_dir >/dev/null; then
+    local vdir vf
+    vdir=$(vscode_user_dir)
+    for vf in "${VSCODE_FILES[@]}"; do
+      _links_into_repo "$vdir/$vf" || { warn "not linked: $(tilde "$vdir/$vf") (vscode)"; bad=1; }
+    done
+  fi
   [[ $bad == 0 ]] && ok "all packages linked"
   return $bad
 }

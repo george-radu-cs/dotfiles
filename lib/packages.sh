@@ -121,7 +121,7 @@ _packages_debian() {
     as_root gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg /tmp/wezterm.gpg.key
     as_root chmod 644 /etc/apt/keyrings/wezterm-fury.gpg
     echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' \
-      | as_root tee /etc/apt/sources.list.d/wezterm.list >/dev/null
+      | root_write /etc/apt/sources.list.d/wezterm.list
     as_root apt-get update -qq
   fi
   as_root apt-get install -y -qq wezterm

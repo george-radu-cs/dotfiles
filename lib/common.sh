@@ -81,6 +81,21 @@ run() {
   fi
 }
 
+# Write stdin to a root-owned file (tee through sudo); `-a` appends. In a dry run
+# the input is read and discarded, so the pipe feeding it doesn't break.
+root_write() {
+  local file=$1 append=${2:-}
+  if [[ $DRY_RUN == 1 ]]; then
+    cat >/dev/null
+    printf '  %s[dry-run]%s write %s\n' "$_c_yellow" "$_c_reset" "$file"
+    return 0
+  fi
+  local sudo=()
+  [[ $EUID -eq 0 ]] || sudo=(sudo)
+  if [[ $append == -a ]]; then "${sudo[@]+"${sudo[@]}"}" tee -a "$file" >/dev/null
+  else "${sudo[@]+"${sudo[@]}"}" tee "$file" >/dev/null; fi
+}
+
 # sudo only when we are not already root (containers run as root).
 as_root() {
   if [[ $EUID -eq 0 ]]; then run "$@"; else run sudo "$@"; fi
