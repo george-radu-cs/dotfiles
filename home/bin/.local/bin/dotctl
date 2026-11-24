@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# dotctl — run the dotfiles bootstrap from any directory: `dotctl doctor`,
+# `dotctl update`, `dotctl link`, … (same commands as ./bootstrap.sh).
+set -euo pipefail
+
+resolve() {
+  local p=$1
+  while [[ -L $p ]]; do
+    local l; l=$(readlink "$p")
+    [[ $l == /* ]] && p=$l || p="$(dirname "$p")/$l"
+  done
+  (cd "$(dirname "$p")" && printf '%s/%s\n' "$(pwd -P)" "$(basename "$p")")
+}
+# $DOTFILES comes from zsh; otherwise follow this script's symlink into the repo.
+DOTFILES="${DOTFILES:-$(dirname "$(resolve "${BASH_SOURCE[0]}")")/../../../..}"
+DOTFILES=$(cd "$DOTFILES" && pwd -P)
+export DOTFILES DOTFILES_CMD=dotctl   # help and hints then say `dotctl …`
+exec "$DOTFILES/bootstrap.sh" "$@"

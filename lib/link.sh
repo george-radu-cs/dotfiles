@@ -284,7 +284,7 @@ restore_backup() {
     mv "$dir/.manifest" "$dir/.manifest.restored"
   fi
   ok "restore complete (backup folder kept: $(tilde "$dir"))"
-  [[ -f $BACKUP_DIR/.manifest ]] && info "what was replaced is in $(tilde "$BACKUP_DIR") (./bootstrap.sh restore undoes this)"
+  [[ -f $BACKUP_DIR/.manifest ]] && info "what was replaced is in $(tilde "$BACKUP_DIR") ($DOTFILES_CMD restore undoes this)"
   return 0
 }
 

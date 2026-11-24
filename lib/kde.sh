@@ -3,8 +3,8 @@
 #
 # Plasma rewrites its config files by replacing them, which breaks symlinks, so
 # these files are copied rather than linked:
-#   ./bootstrap.sh kde-save   copy this machine's Plasma settings into kde/
-#   ./bootstrap.sh kde        copy kde/ back into ~/.config (old files are backed up)
+#   dotctl kde-save   copy this machine's Plasma settings into kde/
+#   dotctl kde        copy kde/ back into ~/.config (old files are backed up)
 
 KDE_DIR="$DOTFILES/kde"
 
@@ -64,7 +64,7 @@ kde_save() {
 kde_apply() {
   if is_macos; then ok "KDE: nothing to do on macOS"; note "skipped (macOS)"; return 0; fi
   if [[ ! -d $KDE_DIR ]] || [[ -z $(ls -A "$KDE_DIR" 2>/dev/null) ]]; then
-    info "KDE: no saved settings yet — run ./bootstrap.sh kde-save on a configured machine"
+    info "KDE: no saved settings yet — run $DOTFILES_CMD kde-save on a configured machine"
     note "no saved settings"
     return 0
   fi

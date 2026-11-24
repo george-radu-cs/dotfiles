@@ -27,7 +27,7 @@ doctor() {
   local missing
   missing=$(check_links 2>&1 | grep -c "not linked" || true)
   if (( missing == 0 )); then _doc_ok "all ${#LINK_PACKAGES[@]} packages linked"
-  else _doc_err "$missing files not linked — run: ./bootstrap.sh link"; fi
+  else _doc_err "$missing files not linked — run: $DOTFILES_CMD link"; fi
 
   _doc_head "Shell"
   if [[ $(basename "${SHELL:-}") == zsh ]]; then _doc_ok "login shell is zsh"; else _doc_warn "login shell is ${SHELL:-unknown}, not zsh"; fi
@@ -41,10 +41,10 @@ doctor() {
     local brew_missing
     brew_missing=$(brew bundle check --no-upgrade --verbose --file "$DOTFILES/packages/Brewfile" 2>&1 | grep -c '^→' || true)
     if (( brew_missing == 0 )); then _doc_ok "Brewfile satisfied"
-    else _doc_warn "$brew_missing Brewfile entries missing — run: ./bootstrap.sh packages"; fi
+    else _doc_warn "$brew_missing Brewfile entries missing — run: $DOTFILES_CMD packages"; fi
     local outdated
     outdated=$(brew outdated --quiet 2>/dev/null | wc -l | tr -d ' ')
-    (( outdated == 0 )) && _doc_ok "Homebrew packages up to date" || _doc_warn "$outdated Homebrew packages outdated — run: ./bootstrap.sh update"
+    (( outdated == 0 )) && _doc_ok "Homebrew packages up to date" || _doc_warn "$outdated Homebrew packages outdated — run: $DOTFILES_CMD update"
   else
     local list="$DOTFILES/packages/$DOTFILES_OS.txt" pkg absent=()
     while IFS= read -r pkg; do
@@ -65,13 +65,13 @@ doctor() {
     local m_missing m_outdated
     m_missing=$("$mise" ls 2>/dev/null | grep -c '(missing)' || true)
     m_outdated=$("$mise" outdated 2>/dev/null | tail -n +2 | grep -c . || true)
-    (( m_missing == 0 )) && _doc_ok "mise: all tools installed" || _doc_err "mise: $m_missing tools missing — run: ./bootstrap.sh toolchains"
-    (( m_outdated == 0 )) && _doc_ok "mise: tools up to date" || _doc_warn "mise: $m_outdated tools outdated — run: ./bootstrap.sh update"
+    (( m_missing == 0 )) && _doc_ok "mise: all tools installed" || _doc_err "mise: $m_missing tools missing — run: $DOTFILES_CMD toolchains"
+    (( m_outdated == 0 )) && _doc_ok "mise: tools up to date" || _doc_warn "mise: $m_outdated tools outdated — run: $DOTFILES_CMD update"
   else
     _doc_err "mise not installed"
   fi
   if has rustup && rustup toolchain list 2>/dev/null | grep -q '^stable'; then _doc_ok "rust $(rustc +stable --version 2>/dev/null | awk '{ print $2 }') (stable)"
-  else _doc_err "rust stable missing — run: ./bootstrap.sh toolchains"; fi
+  else _doc_err "rust stable missing — run: $DOTFILES_CMD toolchains"; fi
 
   # Two installs of the same tool (like Homebrew texlive next to MacTeX) cause
   # hard-to-debug problems.
@@ -117,20 +117,20 @@ doctor() {
     local vdir vbad=0 vf
     vdir=$(vscode_user_dir)
     for vf in "${VSCODE_FILES[@]}"; do _links_into_repo "$vdir/$vf" || vbad=1; done
-    (( vbad == 0 )) && _doc_ok "settings and keybindings linked" || _doc_err "VS Code settings not linked — run: ./bootstrap.sh link"
+    (( vbad == 0 )) && _doc_ok "settings and keybindings linked" || _doc_err "VS Code settings not linked — run: $DOTFILES_CMD link"
     local vmissing
     vmissing=$(comm -23 <(_vscode_wanted | sort) <("$(_vscode_cli)" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' | sort) | grep -c . || true)
-    (( vmissing == 0 )) && _doc_ok "all listed extensions installed" || _doc_warn "$vmissing extensions missing — run: ./bootstrap.sh shell"
+    (( vmissing == 0 )) && _doc_ok "all listed extensions installed" || _doc_warn "$vmissing extensions missing — run: $DOTFILES_CMD shell"
   else
     _doc_warn "VS Code not installed"
   fi
 
   _doc_head "LaTeX"
   if has latexmk; then
-    biber --version >/dev/null 2>&1 && _doc_ok "biber works" || _doc_err "biber fails — run: ./bootstrap.sh toolchains"
-    printf '%s\n' '\begin{document}x\end{document}' | latexindent -g /dev/null - >/dev/null 2>&1 && _doc_ok "latexindent works" || _doc_err "latexindent fails — run: ./bootstrap.sh toolchains"
+    biber --version >/dev/null 2>&1 && _doc_ok "biber works" || _doc_err "biber fails — run: $DOTFILES_CMD toolchains"
+    printf '%s\n' '\begin{document}x\end{document}' | latexindent -g /dev/null - >/dev/null 2>&1 && _doc_ok "latexindent works" || _doc_err "latexindent fails — run: $DOTFILES_CMD toolchains"
   else
-    _doc_warn "TeX Live not installed — run: ./bootstrap.sh packages"
+    _doc_warn "TeX Live not installed — run: $DOTFILES_CMD packages"
   fi
 
   _doc_head "Docker"
@@ -312,6 +312,6 @@ prune() {
     ok "mise: no unused tool versions"
   fi
   if [[ $found == 1 && $remove != 1 ]]; then
-    info "nothing removed — run ./bootstrap.sh prune -y to remove the items above"
+    info "nothing removed — run $DOTFILES_CMD prune -y to remove the items above"
   fi
 }

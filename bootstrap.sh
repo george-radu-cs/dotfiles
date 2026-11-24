@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154  # colour variables come from lib/common.sh
-# Set up a machine from this repo. `./bootstrap.sh` shows help; `./bootstrap.sh install`
+# Set up a machine from this repo. `./bootstrap.sh` (or `dotctl` once linked) shows help; `install`
 # runs packages → links → toolchains → docker → fonts → shell. Safe to re-run.
 set -euo pipefail
 
@@ -14,7 +14,7 @@ done
 
 usage() {
   cat <<EOF
-${_c_bold}Usage:${_c_reset} ./bootstrap.sh <command> [options]
+${_c_bold}Usage:${_c_reset} $DOTFILES_CMD <command> [options]
 
 Set up this machine from the repo. Running without a command shows this help.
 
@@ -27,7 +27,7 @@ ${_c_bold}Setup:${_c_reset}
   fonts          JetBrainsMono Nerd Font
   shell          login shell, zsh/tmux/Neovim plugins, VS Code extensions, theme
   kde            Linux: KDE Plasma settings saved in kde/ (see kde-save)
-                 Steps can be combined: ./bootstrap.sh link shell
+                 Steps can be combined: $DOTFILES_CMD link shell
 
 ${_c_bold}Maintenance:${_c_reset}
   doctor         health report: links, packages, toolchains, Neovim, LaTeX, Docker
@@ -50,14 +50,14 @@ ${_c_bold}Options:${_c_reset}
   -h, --help     show this help; with a command, help for that command
 
 ${_c_bold}Examples:${_c_reset}
-  ./bootstrap.sh install -n      preview a full install
-  ./bootstrap.sh backup          snapshot first
-  ./bootstrap.sh install         set everything up
-  ./bootstrap.sh link            re-link after adding a config
-  ./bootstrap.sh doctor          check that everything is healthy
-  ./bootstrap.sh update          upgrade everything
-  ./bootstrap.sh restore         undo the last change
-  ./bootstrap.sh help restore    details for one command
+  $DOTFILES_CMD install -n      preview a full install
+  $DOTFILES_CMD backup          snapshot first
+  $DOTFILES_CMD install         set everything up
+  $DOTFILES_CMD link            re-link after adding a config
+  $DOTFILES_CMD doctor          check that everything is healthy
+  $DOTFILES_CMD update          upgrade everything
+  $DOTFILES_CMD restore         undo the last change
+  $DOTFILES_CMD help restore    details for one command
 EOF
 }
 
@@ -83,7 +83,7 @@ suggest() {
     END { if (bs <= 2 || index(best, w) == 1) print best }'
 }
 
-# Detailed help for one command: ./bootstrap.sh help <command> or <command> --help
+# Detailed help for one command: dotctl help <command> or <command> --help
 command_help() {
   local cmd=$1 text
   case $cmd in
@@ -91,8 +91,8 @@ command_help() {
 Use it on a new machine, or again later to bring a machine back in line with the
 repo. Steps that have nothing to do finish immediately.
 
-  ./bootstrap.sh install -n        preview, change nothing
-  ./bootstrap.sh install --extra   also install packages/Brewfile.extra (macOS)" ;;
+  $DOTFILES_CMD install -n        preview, change nothing
+  $DOTFILES_CMD install --extra   also install packages/Brewfile.extra (macOS)" ;;
     packages) text="Install system packages. Installed packages are never upgraded.
 
   macOS   Xcode Command Line Tools, Homebrew, packages/Brewfile
@@ -125,15 +125,15 @@ to ~/.local/state/zsh/history, install antidote and the tmux plugins, restore
 Neovim plugins from lazy-lock.json, and apply the default theme if none is set." ;;
     backup) text="Copy everything this repo manages (plus shell history) to
 ~/.dotfiles-backup/<date>/. Nothing is changed. Linked files are stored with
-their real contents. Bring a snapshot back with: ./bootstrap.sh restore <name>" ;;
+their real contents. Bring a snapshot back with: $DOTFILES_CMD restore <name>" ;;
     clean) text="Move leftovers of an old setup (zinit, ~/.tmux, p10k caches, .zcompdump files,
 nvim.bak, neofetch config) into ~/.dotfiles-backup/<date>/. Undo with 'restore'." ;;
     backups) text="List the backups in ~/.dotfiles-backup that 'restore' can bring back." ;;
-    restore) text="Undo the newest backup, or the one named: ./bootstrap.sh restore <name>
+    restore) text="Undo the newest backup, or the one named: $DOTFILES_CMD restore <name>
 
 Removes this repo's links, deletes files the bootstrap created, and moves the
 backed-up files back. Whatever is in the way is backed up first, so a restore
-can itself be undone. List backups with: ./bootstrap.sh backups" ;;
+can itself be undone. List backups with: $DOTFILES_CMD backups" ;;
     doctor) text="Read-only health report, with a fix for every problem it finds:
 links, login shell and zsh startup time, missing or outdated packages and mise
 tools, Rust, several copies of the same tool on PATH, Neovim startup warnings
@@ -149,7 +149,7 @@ Exits with 1 when something is broken." ;;
 Commit lazy-lock.json afterwards so every machine uses the same plugins." ;;
     prune) text="List what is installed but no longer managed by the repo:
 Homebrew packages in neither Brewfile (macOS) and mise tool versions no config
-uses. Nothing is removed unless you add -y:  ./bootstrap.sh prune -y" ;;
+uses. Nothing is removed unless you add -y:  $DOTFILES_CMD prune -y" ;;
     kde) text="Linux with KDE Plasma: copy the settings saved in kde/ back into ~/.config
 (shortcuts, window manager, keyboard and mouse, theme and fonts, panels).
 Files that differ are backed up first (undo with 'restore'). Log out and back
@@ -162,17 +162,17 @@ commit it with 'dots'." ;;
 Exits with 1 if something is missing." ;;
     unlink) text="Remove every symlink this repo created. Backups are not touched; use 'restore'
 to bring old files back." ;;
-    help) text="Show the overview, or detailed help for one command: ./bootstrap.sh help <command>" ;;
+    help) text="Show the overview, or detailed help for one command: $DOTFILES_CMD help <command>" ;;
     *) usage_error "unknown command '$cmd'" "$(suggest "$cmd")" ;;
   esac
-  printf '%s./bootstrap.sh %s%s\n\n%s\n' "$_c_bold" "$cmd" "$_c_reset" "$text"
+  printf '%s%s %s%s\n\n%s\n' "$_c_bold" "$DOTFILES_CMD" "$cmd" "$_c_reset" "$text"
 }
 
 # Wrong command or option: short message on stderr, exit 2 (usage error).
 usage_error() {
   printf '%s✗ %s%s\n' "$_c_red" "$1" "$_c_reset" >&2
   [[ -n ${2:-} ]] && printf "  Did you mean '%s'?\n" "$2" >&2
-  printf '  Run ./bootstrap.sh --help to see all commands.\n' >&2
+  printf '  Run %s --help to see all commands.\n' "$DOTFILES_CMD" >&2
   exit 2
 }
 STEPS=()
@@ -268,6 +268,6 @@ if (( total == ${#ALL_STEPS[@]} )); then done_label="All $total steps"; elif (( 
 printf '\n%s✓ %s finished in %s%s\n' "$_c_green$_c_bold" "$done_label" "$(human_time $((SECONDS - started)))" "$_c_reset"
 for line in "${SUMMARY[@]}"; do printf '  %s\n' "$line"; done
 if [[ -n ${BACKUP_DIR:-} && -f $BACKUP_DIR/.manifest ]]; then
-  info "replaced files are in $(tilde "$BACKUP_DIR")  (undo: ./bootstrap.sh restore)"
+  info "replaced files are in $(tilde "$BACKUP_DIR")  (undo: $DOTFILES_CMD restore)"
 fi
 [[ $DRY_RUN == 1 ]] || printf '\n  next: %sexec zsh%s  (or open a new terminal)\n' "$_c_bold" "$_c_reset"

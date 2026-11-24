@@ -2,6 +2,8 @@
 # Shared helpers for bootstrap and its step scripts. Sourced, never executed.
 
 DOTFILES="${DOTFILES:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+# How the user ran us, for help text and hints: dotctl (the wrapper) or ./bootstrap.sh.
+DOTFILES_CMD="${DOTFILES_CMD:-./bootstrap.sh}"
 DRY_RUN="${DRY_RUN:-0}"
 ASSUME_YES="${ASSUME_YES:-0}"
 

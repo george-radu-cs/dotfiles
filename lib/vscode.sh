@@ -44,7 +44,7 @@ unlink_vscode() {
 }
 
 # Install the extensions from the list that are missing. Never removes any;
-# `./bootstrap.sh prune` lists the extras.
+# `dotctl prune` lists the extras.
 install_vscode_extensions() {
   local cli
   cli=$(_vscode_cli)

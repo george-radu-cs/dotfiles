@@ -73,7 +73,7 @@ _brew_bundle() {
   if [[ ${#after[@]} -gt 0 ]]; then
     warn "still missing (see the errors above):"
     columns "${after[@]}" >&2
-    die "$(basename "$file") incomplete — fix the errors above and rerun ./bootstrap.sh packages"
+    die "$(basename "$file") incomplete — fix the errors above and rerun $DOTFILES_CMD packages"
   fi
   (( rc == 0 )) || warn "brew bundle exited with $rc but everything is installed"
 }

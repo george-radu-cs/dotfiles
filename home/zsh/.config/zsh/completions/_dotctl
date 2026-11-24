@@ -1,5 +1,5 @@
-#compdef bootstrap.sh -p */bootstrap.sh
-# Completion for the dotfiles bootstrap script: ./bootstrap.sh <command> [options]
+#compdef dotctl bootstrap.sh -p */bootstrap.sh
+# Completion for the dotfiles bootstrap: dotctl <command> [options] (or ./bootstrap.sh)
 
 local -a commands steps backups
 commands=(
