@@ -48,6 +48,20 @@ setup_tmux() {
   fi
 }
 
+# tealdeer (`tldr`) ships without pages; download them once.
+setup_tldr() {
+  has tldr || return 0
+  if tldr --list >/dev/null 2>&1; then
+    ok "tldr pages present"
+  else
+    if run tldr --update >/dev/null 2>&1; then
+      ok "tldr pages downloaded"
+    else
+      warn "tldr pages could not be downloaded — run: tldr --update"
+    fi
+  fi
+}
+
 setup_nvim() {
   has nvim || { warn "nvim not found — skipped plugin sync"; return; }
   if run nvim --headless "+Lazy! restore" +qa >/dev/null 2>&1; then

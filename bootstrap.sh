@@ -255,7 +255,7 @@ for s in "${STEPS[@]}"; do
     toolchains) stage $n "$total" "Toolchains"; install_toolchains ;;
     docker)     stage $n "$total" "Docker";     install_docker ;;
     fonts)      stage $n "$total" "Fonts";      install_fonts ;;
-    shell)      stage $n "$total" "Shell";      setup_shell; setup_tmux; setup_nvim; setup_theme ;;
+    shell)      stage $n "$total" "Shell";      setup_shell; setup_tmux; setup_tldr; setup_nvim; setup_theme ;;
     kde)        stage $n "$total" "KDE";        kde_apply ;;
   esac
   took=$(human_time $((SECONDS - t0)))

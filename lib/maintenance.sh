@@ -127,6 +127,7 @@ update_all() {
   if is_linux && [[ -x $HOME/.local/bin/mise ]]; then _upd "mise itself" run "$HOME/.local/bin/mise" self-update --yes; fi
   _upd "mise tools"       run "$(_mise_bin)" upgrade --yes
   _upd "Rust"             run rustup update
+  has tldr && _upd "tldr pages" run tldr --update
   _upd "zsh plugins"      _update_zsh_plugins
   _upd "tmux plugins"     _update_tmux_plugins
   _upd "Neovim"           _update_nvim
