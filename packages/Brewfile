@@ -1,6 +1,6 @@
 # macOS core packages: `brew bundle --file packages/Brewfile`
-# Languages and CLI tools (neovim, fzf, go, …) come from mise, the same on every
-# OS (home/mise/.config/mise/config.toml). This file keeps the rest.
+# Languages come from mise on every OS (home/mise/.config/mise/config.toml).
+# CLI tools come from here on macOS and from mise's config.linux.toml on Linux.
 # Optional/occasional tools live in Brewfile.extra (bootstrap --extra).
 
 # --- shell & terminal ------------------------------------------------------
@@ -18,6 +18,30 @@ brew "mise"
 brew "btop"
 brew "tree"
 brew "luarocks"          # some LazyVim plugins build rocks
+
+# --- CLI tools (Linux: home/mise/.config/mise/config.linux.toml) --------------
+brew "neovim"
+brew "starship"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "zoxide"
+brew "yazi"
+brew "jq"
+brew "tealdeer"
+brew "fastfetch"
+brew "tree-sitter-cli"   # nvim-treesitter compiles parsers with it
+brew "shellcheck"
+brew "stylua"
+
+# --- git & containers ---------------------------------------------------------
+brew "git-delta"
+brew "lazygit"
+brew "gh"
+brew "opentofu"          # `tofu`: open-source Terraform; terraform-ls uses it
+
 
 # --- languages -----------------------------------------------------------------
 # Rust comes from the official rustup installer (lib/toolchains.sh), not brew.

@@ -1,7 +1,7 @@
-# Every language toolchain and CLI tool that mise can install, on every OS:
-# `mise install` sets up the same versions on macOS, Arch, Fedora and Debian.
-# Homebrew / distro packages keep only what mise can't do well (zsh, tmux, btop,
-# Lua, the C/C++ toolchain, LaTeX, Docker, apps). Rust: official rustup.
+# Language toolchains for every machine: `mise install` installs all of them,
+# the same versions on macOS, Arch, Fedora and Debian. Rust: official rustup.
+# CLI tools come from Homebrew on macOS (packages/Brewfile) and from
+# config.linux.toml on Linux (loaded because env.zsh sets MISE_ENV=linux).
 # Per-project versions go in a project's mise.toml / .nvmrc / .java-version.
 #
 # Java: the first entry is the default; switch per shell with java11 … java25
@@ -10,7 +10,6 @@
 # Exception.
 
 [tools]
-# --- languages ---------------------------------------------------------------
 java = ["temurin-21", "temurin-25", "temurin-17", "temurin-11"]
 node = "lts"
 bun = "latest"
@@ -20,28 +19,7 @@ uv = "latest"
 go = "latest"
 "npm:typescript" = "latest" # tsc
 zig = "latest"              # official Zig builds; zls (Neovim) needs the compiler
-opentofu = "latest"         # `tofu`: open-source Terraform; terraform-ls uses it
 flutter = "latest"          # Flutter SDK, includes Dart
-
-# --- CLI tools ---------------------------------------------------------------
-neovim = "latest"
-starship = "latest"
-fzf = "latest"
-ripgrep = "latest"
-fd = "latest"
-bat = "latest"
-eza = "latest"
-zoxide = "latest"
-delta = "latest"
-lazygit = "latest"
-yazi = "latest"
-gh = "latest"
-jq = "latest"
-tealdeer = "latest"
-fastfetch = "latest"
-tree-sitter = "latest"      # nvim-treesitter compiles parsers with it
-shellcheck = "latest"
-stylua = "latest"
 
 [settings]
 # Read .nvmrc / .node-version / .java-version / .python-version files.

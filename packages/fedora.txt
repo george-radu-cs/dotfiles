@@ -21,6 +21,8 @@ wl-clipboard
 xclip
 luarocks
 
+perl-core
+
 # Lua (LuaJIT is what Neovim embeds)
 lua
 luajit

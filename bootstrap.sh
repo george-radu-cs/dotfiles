@@ -106,8 +106,9 @@ Anything already in the way is moved to ~/.dotfiles-backup/<date>/ (undo with
 ~/.config/git/config.local so machine-specific git settings survive." ;;
     toolchains) text="Install language toolchains, only what is missing.
 
-  mise     every language and CLI tool in ~/.config/mise/config.toml, the same
-           on every OS (Java, Node, Python, Go, Flutter, Neovim, fzf, …)
+  mise     languages in ~/.config/mise/config.toml (Java, Node, Python, Go,
+           Flutter, …) on every OS; on Linux also the CLI tools in
+           config.linux.toml (Neovim, fzf, lazygit, …)
   rustup   official installer, stable toolchain, clippy, rustfmt, rust-analyzer
   LaTeX    Perl modules for latexindent; on macOS, Skim set up to jump back to
            Neovim and a working biber on Apple Silicon (TeX Live itself comes

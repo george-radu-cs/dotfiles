@@ -1,5 +1,5 @@
 # Debian / Ubuntu (apt). Debian stable ships old CLI tools (e.g. neovim), which
-# is why CLI tools come from mise instead. WezTerm and Docker repos are added by
+# is why CLI tools come from mise (config.linux.toml) instead. WezTerm and Docker repos are added by
 # the bootstrap scripts.
 
 # base
@@ -24,6 +24,7 @@ xclip
 luarocks
 
 flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
 
 # Lua (LuaJIT is what Neovim embeds)
 lua5.4

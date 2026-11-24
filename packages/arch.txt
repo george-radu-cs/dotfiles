@@ -1,5 +1,6 @@
-# Arch (pacman). Languages and CLI tools (neovim, starship, …) come from mise
-# (home/mise/.config/mise/config.toml), the same on every OS.
+# Arch (pacman). Languages come from mise (home/mise/.config/mise/config.toml)
+# and CLI tools (neovim, starship, …) from mise's config.linux.toml, so every
+# distro gets the same versions.
 
 # base
 base-devel
@@ -23,6 +24,7 @@ luarocks
 mise
 
 flatpak               # desktop apps from Flathub (packages/flatpak.txt)
+
 
 # Lua (LuaJIT is what Neovim embeds)
 lua
