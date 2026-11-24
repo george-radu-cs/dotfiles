@@ -106,6 +106,20 @@ config.mouse_bindings = {
     mods = link_mod,
     action = act.Nop,
   },
+  -- Same link click while an app captures the mouse (tmux `mouse on`, Neovim):
+  -- without these, WezTerm forwards the click to the app and never opens links.
+  {
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = link_mod,
+    mouse_reporting = true,
+    action = act.OpenLinkAtMouseCursor,
+  },
+  {
+    event = { Down = { streak = 1, button = "Left" } },
+    mods = link_mod,
+    mouse_reporting = true,
+    action = act.Nop,
+  },
 }
 
 return config
