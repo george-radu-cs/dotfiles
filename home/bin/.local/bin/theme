@@ -10,6 +10,8 @@
 #   tmux.conf         → tmux status bar and pane colours (reloaded now)
 #   shell.zsh         → BAT_THEME (bat, delta), fzf colours (new shells)
 #   btop              → ~/.config/btop/themes/dotfiles.theme
+#   KDE Plasma        → ~/.local/share/color-schemes/Dotfiles<Name>.colors,
+#                       applied right away when running inside Plasma (Linux)
 # Starship and lazygit use ANSI colours, so they follow the terminal palette.
 set -euo pipefail
 
@@ -131,6 +133,69 @@ else
   echo 'color_theme = "dotfiles"' >>"$btop_conf"
 fi
 
+# KDE Plasma colour scheme (Linux). Generated from the same palette; applied
+# immediately when this is a Plasma session, otherwise picked up next time.
+rgb() { local h=${1#\#}; printf '%d,%d,%d' "0x${h:0:2}" "0x${h:2:2}" "0x${h:4:2}"; }
+if [[ $(uname -s) == Linux ]]; then
+  scheme="Dotfiles$(echo "$name" | sed -E 's/(^|-)([a-z])/\U\2/g')"
+  schemes="${XDG_DATA_HOME:-$HOME/.local/share}/color-schemes"
+  mkdir -p "$schemes"
+  kde_section() {   # name background alternate-background
+    cat <<EOF
+[Colors:$1]
+BackgroundNormal=$(rgb "$2")
+BackgroundAlternate=$(rgb "$3")
+ForegroundNormal=$(rgb "$FG")
+ForegroundInactive=$(rgb "$GRAY")
+ForegroundActive=$(rgb "$BLUE")
+ForegroundLink=$(rgb "$BLUE")
+ForegroundVisited=$(rgb "$MAGENTA")
+ForegroundNegative=$(rgb "$RED")
+ForegroundNeutral=$(rgb "$YELLOW")
+ForegroundPositive=$(rgb "$GREEN")
+DecorationFocus=$(rgb "$BLUE")
+DecorationHover=$(rgb "$CYAN")
+
+EOF
+  }
+  {
+    kde_section Window "$BG" "$BG1"
+    kde_section View "$BG" "$BG1"
+    kde_section Button "$BG1" "$BG2"
+    kde_section Header "$BG1" "$BG"
+    kde_section Tooltip "$BG1" "$BG2"
+    kde_section Complementary "$BG" "$BG1"
+    cat <<EOF
+[Colors:Selection]
+BackgroundNormal=$(rgb "$BLUE")
+BackgroundAlternate=$(rgb "$CYAN")
+ForegroundNormal=$(rgb "$BG")
+ForegroundInactive=$(rgb "$BG1")
+ForegroundActive=$(rgb "$BG")
+ForegroundLink=$(rgb "$BG")
+ForegroundVisited=$(rgb "$BG")
+ForegroundNegative=$(rgb "$RED")
+ForegroundNeutral=$(rgb "$YELLOW")
+ForegroundPositive=$(rgb "$GREEN")
+DecorationFocus=$(rgb "$BLUE")
+DecorationHover=$(rgb "$CYAN")
+
+[General]
+ColorScheme=$scheme
+Name=Dotfiles $name
+
+[WM]
+activeBackground=$(rgb "$BG")
+activeForeground=$(rgb "$FG")
+inactiveBackground=$(rgb "$BG")
+inactiveForeground=$(rgb "$GRAY")
+EOF
+  } | put "$schemes/$scheme.colors"
+  if [[ ${XDG_CURRENT_DESKTOP:-} == *KDE* ]] && command -v plasma-apply-colorscheme >/dev/null; then
+    plasma-apply-colorscheme "$scheme" >/dev/null 2>&1 || true
+  fi
+fi
+
 # name last: WezTerm watches this file and reloads when it changes.
 echo "$name" | put "$STATE/name"
 
@@ -139,4 +204,4 @@ if command -v tmux >/dev/null && tmux info >/dev/null 2>&1; then
   tmux source-file "$CONFIG/tmux/tmux.conf" >/dev/null 2>&1 || true
 fi
 
-echo "theme → $name  (WezTerm, tmux, btop now; nvim on focus; bat/fzf in new shells — or: exec zsh)"
+echo "theme → $name  (WezTerm, tmux, btop${scheme:+, KDE} now; nvim on focus; bat/fzf in new shells — or: exec zsh)"
