@@ -5,9 +5,11 @@
 _cache_completion() {
   local name=$1; shift
   (( $+commands[$name] )) || return
-  local out=$XDG_CACHE_HOME/zsh/completions/_$name
-  if [[ ! -s $out || $commands[$name] -nt $out ]]; then
-    "$@" >|"$out" 2>/dev/null || rm -f "$out"
+  local out=$XDG_CACHE_HOME/zsh/completions/_$name bin=$commands[$name]
+  local src=$XDG_CACHE_HOME/zsh/completions/.$name.src
+  if [[ ! -s $out || $bin -nt $out || ! -r $src || $(<$src) != $bin ]]; then
+    "$@" >|"$out" 2>/dev/null || { rm -f "$out" "$src"; return; }
+    print -r -- "$bin" >|"$src"
   fi
 }
 _cache_completion doctl  doctl completion zsh

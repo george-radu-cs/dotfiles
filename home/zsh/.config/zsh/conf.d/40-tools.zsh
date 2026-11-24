@@ -1,12 +1,14 @@
 # Tool integrations. `tool init zsh` output is cached and only regenerated when
-# the tool's binary changes; that saves a subprocess per tool on every start.
+# the tool's binary changes (newer, or now found at a different path, e.g. after
+# moving from Homebrew to mise); that saves a subprocess per tool on every start.
 
 _cache_eval() {
   local name=$1; shift
   (( $+commands[$name] )) || return 1
-  local out=$XDG_CACHE_HOME/zsh/eval-$name.zsh
-  if [[ ! -s $out || $commands[$name] -nt $out ]]; then
-    "$@" >|"$out" 2>/dev/null || { rm -f "$out"; return 1; }
+  local out=$XDG_CACHE_HOME/zsh/eval-$name.zsh bin=$commands[$name]
+  if [[ ! -s $out || $bin -nt $out || ! -r $out.src || $(<$out.src) != $bin ]]; then
+    "$@" >|"$out" 2>/dev/null || { rm -f "$out" "$out.src"; return 1; }
+    print -r -- "$bin" >|"$out.src"
   fi
   source "$out"
 }
