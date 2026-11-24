@@ -16,10 +16,11 @@ directly.
 | Shell | zsh, [antidote](https://github.com/mattmc3/antidote) (selected oh-my-zsh plugins), [Starship](https://starship.rs) |
 | Terminal | [WezTerm](https://wezterm.org), tmux, JetBrainsMono Nerd Font |
 | Editor | Neovim with [LazyVim](https://www.lazyvim.org) |
-| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, OpenTofu, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
+| Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
-| CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, lazygit, yazi, gh, btop, fastfetch |
+| CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, difftastic, lazygit, lazydocker, yazi, gh, btop, dust, duf, fastfetch, OpenTofu |
+| Benchmarks | hyperfine (commands), oha, wrk and k6 (HTTP load) |
 | Theme | Gruvbox dark (hard) by default; Gruvbox light (hard); Kanagawa wave, dragon and lotus |
 
 ## Requirements
@@ -59,7 +60,7 @@ completes commands and options with Tab.
 | --- | --- | --- |
 | `packages` | Homebrew and `packages/Brewfile` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise, desktop apps from Flathub (`packages/flatpak.txt`) |
 | `link` | Symlinks every package in `home/` into `$HOME`; existing files are moved to a backup | same |
-| `toolchains` | `mise install` (languages and CLI tools), rustup with clippy, rustfmt and rust-analyzer | same |
+| `toolchains` | `mise install` (languages), rustup with clippy, rustfmt and rust-analyzer | same, plus the CLI tools from `config.linux.toml` |
 | `docker` | Verifies Docker Desktop | Docker repository, engine, `/etc/docker/daemon.json`, service, `docker` group |
 | `fonts` | Installed by the Brewfile | JetBrainsMono Nerd Font (pinned release) in `~/.local/share/fonts` |
 | `shell` | Login shell, zsh plugins, tmux plugins, Neovim plugins from `lazy-lock.json`, theme | same |
@@ -78,6 +79,9 @@ with the commands listed under [Maintenance](#maintenance).
 | `java11` … `java25` | Switch the JDK for the current shell |
 | `mise use <tool>@<version>` | Pin a tool version for the current project |
 | `zbench` | Measure shell startup time |
+
+For the command-line tools (bat, eza, zoxide, fd, ripgrep, fzf, lazygit, …),
+tmux and Neovim keys, and everyday workflows, see [docs/TOOLS.md](docs/TOOLS.md).
 
 ## Maintenance
 
@@ -149,8 +153,8 @@ To add a configuration, create `home/<name>/` mirroring its location under
 - Rust is installed with the official rustup installer rather than a package
   manager.
 - All JDKs are Eclipse Temurin (Adoptium) builds of OpenJDK: 11, 17, 21 and 25.
-- Languages and CLI tools come from mise on every OS, so macOS and all three
-  distributions run the same versions.
+- Languages come from mise on every OS. CLI tools come from Homebrew on macOS
+  and from mise on Linux, so all three distributions run the same versions.
 - LaTeX builds keep auxiliary files in `.build/`; the PDF stays next to the
   source. Defaults live in `~/.config/latexmk/latexmkrc`, and a project's own
   `.latexmkrc` overrides them (e.g. `$pdf_mode = 4;` for LuaLaTeX).
