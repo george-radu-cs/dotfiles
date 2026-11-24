@@ -237,7 +237,8 @@ esac
 
 [[ ${#STEPS[@]} -eq 0 ]] && STEPS=("${ALL_STEPS[@]}")
 
-if [[ $DRY_RUN != 1 && $EUID -ne 0 ]] && is_linux; then
+# Only the packages and docker steps need root; ask for the password once, up front.
+if [[ $DRY_RUN != 1 && $EUID -ne 0 ]] && is_linux && [[ " ${STEPS[*]} " == *" packages "* || " ${STEPS[*]} " == *" docker "* ]]; then
   sudo -v || die "sudo is required for system packages"
 fi
 
