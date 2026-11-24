@@ -251,6 +251,7 @@ Windows are named after the folder (at the shell) or the running program.
 | `<Space>oo` / `<Space>os` | Obsidian: find a note / search all notes |
 | `<Space>od` / `<Space>on` | Obsidian: today's note (in `Journal/`) / new note |
 | `<Space>ob` / `<Space>ot` | Obsidian: backlinks / tags; `Enter` on a `[[link]]` follows it |
+| `<Space>ol` / `<Space>ow` | Obsidian: links in this note / switch vault |
 
 `:Lazy` manages plugins, `:Mason` language servers and formatters,
 `:checkhealth` diagnoses problems.
@@ -270,6 +271,23 @@ flutter create app && cd app    # new Flutter project (dart comes with Flutter)
 zig run main.zig                # build and run a Zig file
 tsc --init                      # TypeScript config for a project
 ```
+
+## LaTeX
+
+Open a `.tex` file in Neovim and press `\ll`: latexmk rebuilds the PDF on every
+save, `\lv` jumps to the current line in the PDF (Skim on macOS, zathura on
+Linux), and Shift-⌘-click in Skim (Ctrl-click in zathura) jumps back to the
+source. Errors open in the quickfix list.
+
+```sh
+latexmk main.tex                # build once (auxiliary files go to .build/)
+latexmk -pvc main.tex           # rebuild on every change, with the viewer open
+latexmk -c                      # remove auxiliary files, keep the PDF
+latexindent -w main.tex         # format the file in place
+```
+
+A project's own `.latexmkrc` overrides the defaults, e.g. `$pdf_mode = 4;`
+for LuaLaTeX or `$pdf_mode = 5;` for XeLaTeX.
 
 ## Infrastructure
 
@@ -291,7 +309,3 @@ Neovim uses OpenTofu for Terraform files too (validation and formatting).
 theme kanagawa-wave             # switch the colour theme everywhere (theme alone lists them)
 zbench                          # how fast the shell starts
 ```
-
-## Worth adding next
-
-More candidates are collected in [IDEAS.md](../IDEAS.md).

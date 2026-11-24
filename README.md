@@ -19,6 +19,7 @@ directly.
 | Toolchains | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim |
 | Containers | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux) |
+| Desktop apps | WezTerm, Docker Desktop, Alfred, Obsidian, Skim, Bitwarden (App Store) on macOS; Obsidian and Bitwarden from Flathub on Linux |
 | CLI | fzf, ripgrep, fd, bat, eza, zoxide, delta, difftastic, lazygit, lazydocker, yazi, gh, btop, dust, duf, fastfetch, OpenTofu |
 | Benchmarks | hyperfine (commands), oha, wrk and k6 (HTTP load) |
 | Databases & security | pgcli, mycli, trivy |
@@ -59,12 +60,12 @@ completes commands and options with Tab.
 
 | Step | macOS | Linux |
 | --- | --- | --- |
-| `packages` | Homebrew and `packages/Brewfile` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise, desktop apps from Flathub (`packages/flatpak.txt`) |
+| `packages` | Homebrew and `packages/Brewfile`, including App Store apps via `mas` (`--extra` adds `Brewfile.extra`) | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise, desktop apps from Flathub (`packages/flatpak.txt`); wrk is built from source on Arch and Fedora |
 | `link` | Symlinks every package in `home/` into `$HOME`; existing files are moved to a backup | same |
-| `toolchains` | `mise install` (languages), rustup with clippy, rustfmt and rust-analyzer | same, plus the CLI tools from `config.linux.toml` |
+| `toolchains` | `mise install` (languages), rustup with clippy, rustfmt and rust-analyzer; LaTeX: latexindent's Perl modules, Skim linked to Neovim, a working biber | same, plus the CLI tools from `config.linux.toml` (no Skim or biber step) |
 | `docker` | Verifies Docker Desktop | Docker repository, engine, `/etc/docker/daemon.json`, service, `docker` group |
 | `fonts` | Installed by the Brewfile | JetBrainsMono Nerd Font (pinned release) in `~/.local/share/fonts` |
-| `shell` | Login shell, zsh plugins, tmux plugins, Neovim plugins from `lazy-lock.json`, theme | same |
+| `shell` | Login shell, zsh plugins, tmux plugins, tldr pages, Neovim plugins from `lazy-lock.json`, theme | same |
 | `kde` | nothing | KDE Plasma settings saved in `kde/` (shortcuts, window manager, keyboard, theme, panels) |
 
 Installed packages are not upgraded by the bootstrap. Upgrade deliberately
@@ -76,7 +77,7 @@ with the commands listed under [Maintenance](#maintenance).
 | --- | --- |
 | `dots` | Open lazygit in this repository to review, commit and push changes |
 | `dots <git args>` | Run git in this repository, e.g. `dots status`, `dots pull` |
-| `theme` | List themes; `theme <name>` switches WezTerm, tmux, Neovim, bat, delta, fzf and btop |
+| `theme` | List themes; `theme <name>` switches WezTerm, tmux, Neovim, bat, delta, fzf, btop and the KDE colour scheme |
 | `java11` … `java25` | Switch the JDK for the current shell |
 | `mise use <tool>@<version>` | Pin a tool version for the current project |
 | `zbench` | Measure shell startup time |
@@ -88,13 +89,14 @@ tmux and Neovim keys, and everyday workflows, see [docs/TOOLS.md](docs/TOOLS.md)
 
 ```sh
 ./bootstrap.sh doctor     # health report; suggests a fix for every problem
-./bootstrap.sh update     # upgrade packages, mise tools, Rust, zsh/tmux/Neovim plugins, TeX Live
-./bootstrap.sh prune      # list packages and tool versions the repo no longer manages
+./bootstrap.sh update     # upgrade packages, mise tools, Rust, tldr pages, zsh/tmux/Neovim plugins, TeX Live
+./bootstrap.sh prune      # list packages you installed that the repo doesn't manage, and unused mise versions
 ./bootstrap.sh prune -y   # …and remove them
 ```
 
 `update` also refreshes Neovim's treesitter parsers and Mason tools. Commit the
 resulting `lazy-lock.json` to keep every machine on the same plugin versions.
+`prune` never touches App Store apps, taps, or libraries other packages need.
 
 ## KDE Plasma
 
@@ -127,12 +129,15 @@ change.
 ## Repository layout
 
 ```text
-bootstrap.sh            entry point
-lib/                    bootstrap steps (packages, link, toolchains, docker, fonts, shell)
-packages/               Brewfile, Brewfile.extra and the Arch, Fedora and Debian package lists
+bootstrap.sh            entry point: commands, help, step order
+lib/                    common (helpers) · packages · link (stow, backups, restore)
+                        toolchains · latex · docker · fonts · shell · kde · maintenance
+packages/               Brewfile, Brewfile.extra, arch/fedora/debian lists, flatpak.txt
 home/<package>/         stow packages; each mirrors the layout of $HOME
 themes/                 colour palettes used by the theme command
 system/docker/          daemon.json installed to /etc/docker on Linux
+kde/                    Plasma settings saved by `kde-save` (created on first save)
+docs/TOOLS.md           guide to the command-line tools, keys and workflows
 ```
 
 ## Customization
@@ -159,6 +164,8 @@ To add a configuration, create `home/<name>/` mirroring its location under
 - LaTeX builds keep auxiliary files in `.build/`; the PDF stays next to the
   source. Defaults live in `~/.config/latexmk/latexmkrc`, and a project's own
   `.latexmkrc` overrides them (e.g. `$pdf_mode = 4;` for LuaLaTeX).
+- obsidian.nvim treats every folder under `~/Obsidian` that contains a
+  `.obsidian` directory as a vault.
 - MacTeX's `biber` launcher fails with current Xcode versions; on Apple Silicon
   the bootstrap extracts its working binary to `~/.local/bin/biber` and removes
   it again once TeX Live ships a fixed one.
