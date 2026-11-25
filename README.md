@@ -19,7 +19,7 @@ directly.
 | Toolchains           | [mise](https://mise.jdx.dev): Java 11/17/21/25, Node.js LTS, Bun, Python, uv, IPython, Go, TypeScript, Zig, Flutter · official [rustup](https://rustup.rs) · Lua · C/C++ (clang, CMake, Ninja) |
 | LaTeX                | TeX Live (MacTeX on macOS), latexmk, biber, latexindent, chktex; Skim (macOS) or zathura (Linux) with SyncTeX; vimtex + texlab in Neovim                                                       |
 | Containers           | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux)                                                                                                                          |
-| Desktop apps         | WezTerm, Docker Desktop, Alfred, Obsidian, Skim, Bitwarden (App Store) on macOS; Obsidian and Bitwarden from Flathub on Linux                                                                  |
+| Desktop apps         | WezTerm, Docker Desktop, Alfred, Obsidian, Skim, Bitwarden (App Store) on macOS; WezTerm on Linux                                                                                              |
 | CLI                  | fzf, ripgrep, fd, bat, eza, zoxide, delta, difftastic, lazygit, lazydocker, yazi, gh, btop, dust, duf, fastfetch, OpenTofu                                                                     |
 | Benchmarks           | hyperfine (commands), oha, wrk and k6 (HTTP load)                                                                                                                                              |
 | Databases & security | pgcli, mycli, trivy                                                                                                                                                                            |
@@ -62,7 +62,7 @@ completes commands and options with Tab.
 
 | Step         | macOS                                                                                                                                                | Linux                                                                                                                                                          |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `packages`   | Homebrew and `packages/Brewfile`, including App Store apps via `mas` (`--extra` adds `Brewfile.extra`)                                               | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise, desktop apps from Flathub (`packages/flatpak.txt`); wrk is built from source on Arch and Fedora |
+| `packages`   | Homebrew and `packages/Brewfile`, including App Store apps via `mas` (`--extra` adds `Brewfile.extra`)                                               | `packages/{arch,fedora,debian}.txt`, WezTerm repository, mise; wrk is built from source on Arch and Fedora                                                     |
 | `link`       | Symlinks every package in `home/` into `$HOME`, and VS Code's settings and keybindings; existing files are moved to a backup                         | same                                                                                                                                                           |
 | `toolchains` | `mise install` (languages), rustup with clippy, rustfmt and rust-analyzer; LaTeX: latexindent's Perl modules, Skim linked to Neovim, a working biber | same, plus the CLI tools from `config.linux.toml` (no Skim or biber step)                                                                                      |
 | `docker`     | Verifies Docker Desktop                                                                                                                              | Docker repository, engine, `/etc/docker/daemon.json`, service, `docker` group                                                                                  |
@@ -134,7 +134,7 @@ dotctl unlink               # remove all links created by this repository
 bootstrap.sh            entry point: commands, help, step order
 lib/                    common (helpers) · packages · link (stow, backups, restore)
                         toolchains · latex · docker · fonts · shell · kde · maintenance
-packages/               Brewfile, Brewfile.extra, arch/fedora/debian lists, flatpak.txt
+packages/               Brewfile, Brewfile.extra, arch/fedora/debian lists
 home/<package>/         stow packages; each mirrors the layout of $HOME
 themes/                 colour palettes used by the theme command
 system/docker/          daemon.json installed to /etc/docker on Linux

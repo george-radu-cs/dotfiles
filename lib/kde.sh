@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# KDE Plasma (Linux): desktop apps from Flathub and Plasma settings kept in kde/.
+# KDE Plasma (Linux): Plasma settings kept in kde/.
 #
 # Plasma rewrites its config files by replacing them, which breaks symlinks, so
 # these files are copied rather than linked:
@@ -27,23 +27,6 @@ KDE_FILES=(
 )
 
 in_kde() { [[ ${XDG_CURRENT_DESKTOP:-} == *KDE* || -n ${KDE_FULL_SESSION:-} ]]; }
-
-# --- desktop apps (Flathub) ----------------------------------------------------
-
-install_flatpaks() {
-  is_linux || return 0
-  local list="$DOTFILES/packages/flatpak.txt"
-  if ! has flatpak; then
-    warn "flatpak not installed — skipped desktop apps"
-    return 0
-  fi
-  run flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  local apps=() app
-  while IFS= read -r app; do apps+=("$app"); done < <(read_list "$list" | awk '{ print $1 }')
-  [[ ${#apps[@]} -gt 0 ]] || return 0
-  run flatpak install --user --noninteractive flathub "${apps[@]}"
-  ok "desktop apps: ${apps[*]}"
-}
 
 # --- Plasma settings -----------------------------------------------------------
 
