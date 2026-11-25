@@ -18,6 +18,7 @@ The tools added most recently, each explained further down:
 | OpenTofu                     | `tofu init && tofu plan` — open-source Terraform                       |
 | pgcli / mycli                | `pgcli postgres://localhost/app` — database shells with completion     |
 | trivy                        | `trivy image nginx:latest` — find known vulnerabilities                |
+| kind / k9s                   | `kind create cluster && k9s` — a local Kubernetes cluster and its UI   |
 | obsidian.nvim                | open a note in `~/Obsidian/…`, then `<Space>oo` — your vault in Neovim |
 | Flutter, Zig, Go, TypeScript | managed by mise, like Java, Node and Python                            |
 
@@ -107,6 +108,17 @@ dc up -d          # docker compose (alias dc)
 dust              # what's using space under the current folder, biggest first
 dust -d 2 ~       # two levels deep from your home folder
 duf               # all disks: size, used, free
+```
+
+## Kubernetes
+
+```sh
+kind create cluster --name dev    # local cluster in Docker (~1 min); kind delete cluster --name dev
+kind load docker-image app:0.1.0 --name dev   # use a locally built image without a registry
+k9s                               # browse the cluster; : to jump to a resource, ? for keys
+kubectx / kubens                  # pick a context / namespace with fzf
+k get pods -A                     # kubectl aliases come from the oh-my-zsh plugin (k, kgp, kaf…)
+helm install name repo/chart -n ns --create-namespace   # install third-party software
 ```
 
 ## Databases

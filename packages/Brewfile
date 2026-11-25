@@ -44,6 +44,13 @@ brew "lazydocker"
 brew "gh"
 brew "opentofu"          # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- kubernetes ----------------------------------------------------------------
+brew "kubernetes-cli"    # kubectl
+brew "kind"              # local clusters, each node a Docker container
+brew "k9s"               # terminal UI for a cluster
+brew "kubectx"           # kubectx / kubens: switch context and namespace
+brew "helm"              # charts: install third-party software into a cluster
+
 # --- databases & security ----------------------------------------------------
 brew "pgcli"             # PostgreSQL shell with completion and highlighting
 brew "mycli"             # MySQL shell, same idea

@@ -4,9 +4,7 @@
 # --- cloud / containers / k8s ------------------------------------------------
 cask "azure-cli"
 brew "doctl"
-brew "helm"
 brew "minikube"
-brew "kubectx"
 
 # --- dev tooling -------------------------------------------------------------
 brew "ast-grep"

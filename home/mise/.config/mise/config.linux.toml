@@ -30,6 +30,14 @@ lazydocker = "latest"
 gh = "latest"
 opentofu = "latest"         # `tofu`: open-source Terraform; terraform-ls uses it
 
+# --- kubernetes --------------------------------------------------------------
+kubectl = "latest"
+kind = "latest"             # local clusters, each node a Docker container
+k9s = "latest"              # terminal UI for a cluster
+kubectx = "latest"          # switch context
+kubens = "latest"           # switch namespace
+helm = "latest"             # charts: install third-party software into a cluster
+
 # --- databases & security ----------------------------------------------------
 "pipx:pgcli" = "latest"     # PostgreSQL shell (needs libpq from the distro packages)
 "pipx:mycli" = "latest"     # MySQL shell

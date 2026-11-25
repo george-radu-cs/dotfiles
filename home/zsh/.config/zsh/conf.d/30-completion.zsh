@@ -17,6 +17,8 @@ _cache_completion docker docker completion zsh
 _cache_completion gh     gh completion -s zsh
 _cache_completion mise   mise completion zsh
 _cache_completion helm   helm completion zsh
+_cache_completion kind   kind completion zsh
+_cache_completion k9s    k9s completion zsh
 _cache_completion uv     uv generate-shell-completion zsh
 
 # compinit with a cached dump: full security check at most once a day.

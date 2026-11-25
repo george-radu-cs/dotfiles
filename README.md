@@ -21,6 +21,7 @@ directly.
 | Containers           | Docker Desktop (macOS), Docker Engine with Compose and Buildx (Linux)                                                                                                                          |
 | Desktop apps         | WezTerm, Docker Desktop, Alfred, Obsidian, Skim, Bitwarden (App Store) on macOS; WezTerm on Linux                                                                                              |
 | CLI                  | fzf, ripgrep, fd, bat, eza, zoxide, delta, difftastic, lazygit, lazydocker, yazi, gh, btop, dust, duf, fastfetch, OpenTofu                                                                     |
+| Kubernetes           | kubectl, kind, k9s, kubectx/kubens, Helm                                                                                                                                                       |
 | Benchmarks           | hyperfine (commands), oha, wrk and k6 (HTTP load)                                                                                                                                              |
 | Databases & security | pgcli, mycli, trivy                                                                                                                                                                            |
 | Theme                | Gruvbox dark (hard) by default; Gruvbox light (hard); Kanagawa wave, dragon and lotus                                                                                                          |
