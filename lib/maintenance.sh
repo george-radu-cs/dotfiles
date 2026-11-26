@@ -3,7 +3,7 @@
 # shellcheck disable=SC2015  # `check && ok || err`: the ok/warn helpers always succeed
 # Keeping an installed machine healthy:
 #   doctor   read-only health report (links, packages, toolchains, Neovim, LaTeX…)
-#   update   upgrade everything the repo manages, in one go
+#   update   upgrade what the repo manages; pick the steps or run them all
 #   prune    list (and with -y remove) what is installed but no longer managed
 
 _DOC_OK=0 _DOC_WARN=0 _DOC_ERR=0
@@ -146,30 +146,123 @@ doctor() {
 
 # --- update --------------------------------------------------------------------
 
+# Every update step, in the order they run. `dotctl update <step>…` picks some;
+# without names an interactive menu asks (Enter alone runs them all).
+# shellcheck disable=SC2034  # read by bootstrap.sh
+UPDATE_STEP_NAMES=(system mise rust tldr zsh tmux nvim texlive)
+
+# The steps that apply on this machine, as parallel arrays: name, label, details.
+_update_collect() {
+  _U_NAMES=() _U_LABELS=() _U_DESCS=()
+  local sys
+  case $DOTFILES_OS in
+    macos) sys=Homebrew ;; arch) sys=pacman ;; fedora) sys=dnf ;; debian) sys=apt ;;
+  esac
+  _update_add system  "$sys"          "system packages"
+  if is_linux; then _update_add mise "mise" "mise itself and its tools"
+  else _update_add mise "mise" "tools (Java, Node, Python, Go, …)"; fi
+  _update_add rust    "Rust"          "rustup stable toolchain"
+  if has tldr; then _update_add tldr "tldr pages" "offline command examples"; fi
+  _update_add zsh     "zsh plugins"   "antidote"
+  _update_add tmux    "tmux plugins"  "tpm"
+  _update_add nvim    "Neovim"        "plugins, treesitter parsers, Mason tools"
+  if is_macos && has tlmgr; then _update_add texlive "TeX Live" "tlmgr (asks for your password)"; fi
+}
+_update_add() { _U_NAMES+=("$1"); _U_LABELS+=("$2"); _U_DESCS+=("$3"); }
+
 update_all() {
   export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
   _mise_env
+  _update_collect
+  local chosen=() name i requested=" ${UPDATE_STEPS[*]:-} "
+  if [[ ${#UPDATE_STEPS[@]} -gt 0 ]]; then
+    for name in "${UPDATE_STEPS[@]}"; do
+      [[ " ${_U_NAMES[*]} " == *" $name "* ]] || warn "$name: not available on this machine, skipped"
+    done
+    for name in "${_U_NAMES[@]}"; do [[ $requested == *" $name "* ]] && chosen+=("$name"); done
+  elif [[ $ASSUME_YES != 1 && -t 0 && -t 1 ]]; then
+    _update_menu
+    for ((i = 0; i < ${#_U_NAMES[@]}; i++)); do [[ ${_U_SEL[i]} == 1 ]] && chosen+=("${_U_NAMES[i]}"); done
+  else
+    chosen=("${_U_NAMES[@]}")
+  fi
+  if [[ ${#chosen[@]} -eq 0 ]]; then info "nothing selected, nothing updated"; return 0; fi
+
   _UPDATE_RESULTS=()
-  case $DOTFILES_OS in
-    macos)  _upd "Homebrew"       run sh -c 'brew update && brew upgrade' ;;
-    arch)   _upd "pacman"         as_root pacman -Syu --noconfirm ;;
-    fedora) _upd "dnf"            as_root dnf -y upgrade ;;
-    debian) _upd "apt"            _apt_upgrade ;;
-  esac
-  if is_linux && [[ -x $HOME/.local/bin/mise ]]; then _upd "mise itself" run "$HOME/.local/bin/mise" self-update --yes; fi
-  _upd "mise tools"       run "$(_mise_bin)" upgrade --yes
-  _upd "Rust"             run rustup update
-  has tldr && _upd "tldr pages" run tldr --update
-  _upd "zsh plugins"      _update_zsh_plugins
-  _upd "tmux plugins"     _update_tmux_plugins
-  _upd "Neovim"           _update_nvim
-  is_macos && has tlmgr && _upd "TeX Live" _update_texlive
+  for name in "${chosen[@]}"; do _update_run "$name"; done
 
   step "Summary"
   local r; for r in "${_UPDATE_RESULTS[@]}"; do printf '  %s\n' "$r"; done
   if ! git -C "$DOTFILES" diff --quiet -- home/nvim/.config/nvim/lazy-lock.json 2>/dev/null; then
     info "lazy-lock.json changed — commit it so other machines get the same plugins (dots)"
   fi
+}
+
+_update_run() {
+  case $1 in
+    system)
+      case $DOTFILES_OS in
+        macos)  _upd "Homebrew" run sh -c 'brew update && brew upgrade' ;;
+        arch)   _upd "pacman"   as_root pacman -Syu --noconfirm ;;
+        fedora) _upd "dnf"      as_root dnf -y upgrade ;;
+        debian) _upd "apt"      _apt_upgrade ;;
+      esac ;;
+    mise)
+      if is_linux && [[ -x $HOME/.local/bin/mise ]]; then _upd "mise itself" run "$HOME/.local/bin/mise" self-update --yes; fi
+      _upd "mise tools" run "$(_mise_bin)" upgrade --yes ;;
+    rust)    _upd "Rust"         run rustup update ;;
+    tldr)    _upd "tldr pages"   run tldr --update ;;
+    zsh)     _upd "zsh plugins"  _update_zsh_plugins ;;
+    tmux)    _upd "tmux plugins" _update_tmux_plugins ;;
+    nvim)    _upd "Neovim"       _update_nvim ;;
+    texlive) _upd "TeX Live"     _update_texlive ;;
+  esac
+}
+
+# Checklist on the terminal, every step ticked: ↑/↓ or j/k move, space ticks,
+# a ticks all or none, enter runs the ticked steps, q or esc cancels (none).
+# Leaves the choice in _U_SEL (1 = run).
+_update_menu() {
+  local n=${#_U_NAMES[@]} cur=0 key rest i all
+  _U_SEL=(); for ((i = 0; i < n; i++)); do _U_SEL[i]=1; done
+  printf '\n%sChoose what to update%s  %s\n' "$_c_bold" "$_c_reset" \
+    "$(hint '↑↓ move · space select · a all/none · enter update · q cancel')"
+  local tty; tty=$(stty -g)
+  stty -echo                             # keys pressed between redraws stay off screen
+  printf '\e[?25l'                       # hide the cursor while the menu is up
+  trap 'stty "$tty"; printf "\e[?25h"; exit 130' INT
+  _update_menu_draw "$cur"
+  while :; do
+    IFS= read -rsn1 key || key=q
+    if [[ $key == $'\e' ]]; then         # arrow keys arrive as ESC [ A/B
+      IFS= read -rsn2 -t 1 rest || rest=""
+      case $rest in '[A') key=k ;; '[B') key=j ;; *) key=q ;; esac
+    fi
+    case $key in
+      k) cur=$(( (cur + n - 1) % n )) ;;
+      j) cur=$(( (cur + 1) % n )) ;;
+      ' ') _U_SEL[cur]=$(( 1 - _U_SEL[cur] )) ;;
+      a) all=1; for ((i = 0; i < n; i++)); do [[ ${_U_SEL[i]} == 1 ]] || all=0; done
+         for ((i = 0; i < n; i++)); do _U_SEL[i]=$(( 1 - all )); done ;;
+      '') break ;;
+      q) for ((i = 0; i < n; i++)); do _U_SEL[i]=0; done; break ;;
+      *) continue ;;
+    esac
+    printf '\e[%dA' "$n"                 # back to the first row and redraw
+    _update_menu_draw "$cur"
+  done
+  stty "$tty"; printf '\e[?25h'
+  trap - INT
+}
+
+_update_menu_draw() {
+  local cur=$1 i box ptr label
+  for ((i = 0; i < ${#_U_NAMES[@]}; i++)); do
+    if [[ ${_U_SEL[i]} == 1 ]]; then box="${_c_green}[x]${_c_reset}"; else box="[ ]"; fi
+    printf -v label '%-13s' "${_U_LABELS[i]}"
+    if (( i == cur )); then ptr="${_c_blue}❯${_c_reset}"; label="${_c_bold}${label}${_c_reset}"; else ptr=" "; fi
+    printf '\e[2K  %s %s %s %s\n' "$ptr" "$box" "$label" "$(hint "${_U_DESCS[i]}")"
+  done
 }
 
 # Run one update step and record its result for the summary.

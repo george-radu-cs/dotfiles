@@ -1,7 +1,7 @@
 #compdef dotctl bootstrap.sh -p */bootstrap.sh
 # Completion for the dotfiles bootstrap: dotctl <command> [options] (or ./bootstrap.sh)
 
-local -a commands steps backups
+local -a commands steps backups update_steps
 commands=(
   'install:run every setup step in order'
   'packages:system packages (Homebrew / pacman / dnf / apt) and mise'
@@ -12,7 +12,7 @@ commands=(
   'shell:login shell, zsh/tmux/Neovim plugins, theme'
   'kde:apply the KDE Plasma settings saved in kde/ (Linux)'
   'doctor:health report with fixes'
-  'update:upgrade packages, toolchains and plugins'
+  'update:upgrade packages, toolchains and plugins (choose which)'
   'prune:list (or with -y remove) unmanaged packages'
   'kde-save:save the KDE Plasma settings of this machine into kde/ (Linux)'
   'backup:copy the current config, change nothing'
@@ -24,11 +24,21 @@ commands=(
   'help:show help for a command'
 )
 steps=(packages link toolchains docker fonts shell kde)
+update_steps=(
+  'system:Homebrew / pacman / dnf / apt'
+  'mise:mise tools (and mise itself on Linux)'
+  'rust:Rust stable'
+  'tldr:tldr pages'
+  'zsh:zsh plugins'
+  'tmux:tmux plugins'
+  'nvim:Neovim plugins, parsers, Mason tools'
+  'texlive:TeX Live (macOS)'
+)
 
 _arguments -C \
   '(-n --dry-run)'{-n,--dry-run}'[print what would happen, change nothing]' \
   '--extra[also install Brewfile.extra (macOS)]' \
-  '(-y --yes)'{-y,--yes}'[prune: remove the listed items]' \
+  '(-y --yes)'{-y,--yes}'[prune: remove the listed items; update: skip the menu]' \
   '(-h --help)'{-h,--help}'[show help]' \
   '1: :->command' \
   '*:: :->args' && return
@@ -45,9 +55,12 @@ case $state in
         _describe -t backups 'backup' backups ;;
       packages|link|toolchains|docker|fonts|shell|kde)
         _describe -t steps 'step' steps ;;
+      update)
+        _describe -t update_steps 'update step' update_steps ;;
     esac
     _arguments \
       '(-n --dry-run)'{-n,--dry-run}'[print what would happen, change nothing]' \
+      '(-y --yes)'{-y,--yes}'[prune: remove the listed items; update: skip the menu]' \
       '--extra[also install Brewfile.extra (macOS)]' \
       '(-h --help)'{-h,--help}'[show help for this command]' ;;
 esac

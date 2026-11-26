@@ -328,7 +328,8 @@ Neovim uses OpenTofu for Terraform files too (validation and formatting).
 
 ```sh
 dotctl doctor           # health report with fixes
-dotctl update           # upgrade everything
+dotctl update           # pick what to upgrade (enter alone: everything)
+dotctl update nvim      # only one step (system mise rust tldr zsh tmux nvim texlive)
 dotctl prune            # list packages the repo no longer manages (-y removes them)
 dotctl kde-save         # Linux: save this machine's KDE Plasma settings into the repo
 dotctl help <command>   # details for any command

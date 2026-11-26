@@ -92,7 +92,8 @@ tmux and Neovim keys, and everyday workflows, see [docs/TOOLS.md](docs/TOOLS.md)
 
 ```sh
 dotctl doctor     # health report; suggests a fix for every problem
-dotctl update     # upgrade packages, mise tools, Rust, tldr pages, zsh/tmux/Neovim plugins, TeX Live
+dotctl update     # pick what to upgrade (enter alone: everything): packages, mise tools, Rust, tldr pages, zsh/tmux/Neovim plugins, TeX Live
+dotctl update nvim zsh   # only those steps; -y updates everything without asking
 dotctl prune      # list packages you installed that the repo doesn't manage, and unused mise versions
 dotctl prune -y   # …and remove them
 ```

@@ -31,7 +31,7 @@ ${_c_bold}Setup:${_c_reset}
 
 ${_c_bold}Maintenance:${_c_reset}
   doctor         health report: links, packages, toolchains, Neovim, LaTeX, Docker
-  update         upgrade everything: packages, mise, Rust, zsh/tmux/Neovim plugins
+  update [STEP…] upgrade packages, mise, Rust, zsh/tmux/Neovim plugins (asks which)
   prune          list what is installed but no longer managed (-y removes it)
   kde-save       Linux: save this machine's KDE Plasma settings into kde/
 
@@ -46,7 +46,7 @@ ${_c_bold}Backups:${_c_reset}
 ${_c_bold}Options:${_c_reset}
   -n, --dry-run  print what would happen, change nothing
       --extra    with packages/install on macOS: also install Brewfile.extra
-  -y, --yes      with prune: remove the listed items
+  -y, --yes      with prune: remove the listed items; with update: no menu, update all
   -h, --help     show this help; with a command, help for that command
 
 ${_c_bold}Examples:${_c_reset}
@@ -55,7 +55,8 @@ ${_c_bold}Examples:${_c_reset}
   $DOTFILES_CMD install         set everything up
   $DOTFILES_CMD link            re-link after adding a config
   $DOTFILES_CMD doctor          check that everything is healthy
-  $DOTFILES_CMD update          upgrade everything
+  $DOTFILES_CMD update          choose what to upgrade (enter: everything)
+  $DOTFILES_CMD update nvim zsh only those steps
   $DOTFILES_CMD restore         undo the last change
   $DOTFILES_CMD help restore    details for one command
 EOF
@@ -65,8 +66,11 @@ ALL_STEPS=(packages link toolchains docker fonts shell kde)
 COMMANDS=(install "${ALL_STEPS[@]}" doctor update prune kde-save backup clean backups restore check unlink help)
 
 # Closest command name (edit distance ≤ 2, or a prefix), for "did you mean".
+# Other candidates can follow the word: suggest <word> [candidate…]
 suggest() {
-  printf '%s\n' "${COMMANDS[@]}" | awk -v w="$1" '
+  local word=$1; shift
+  [[ $# -gt 0 ]] || set -- "${COMMANDS[@]}"
+  printf '%s\n' "$@" | awk -v w="$word" '
     function lev(a, b,   i, j, la, lb, d, c) {
       la = length(a); lb = length(b)
       for (i = 0; i <= la; i++) d[i, 0] = i
@@ -139,13 +143,21 @@ links, login shell and zsh startup time, missing or outdated packages and mise
 tools, Rust, several copies of the same tool on PATH, Neovim startup warnings
 and broken Mason tools, LaTeX (biber, latexindent) and Docker.
 Exits with 1 when something is broken." ;;
-    update) text="Upgrade everything the repo manages, one step after another:
+    update) text="Upgrade what the repo manages. In a terminal it first shows a checklist with
+every step selected: space toggles one, a selects all or none, enter starts
+(so enter alone updates everything), q cancels.
   system     Homebrew (macOS) or pacman / dnf / apt (Linux)
   mise       all tools, and mise itself on Linux
-  rustup     Rust stable
-  plugins    zsh (antidote), tmux (tpm), Neovim (lazy.nvim, then treesitter
-             parsers, then Mason tools)
-  TeX Live   tlmgr on macOS (asks for your password)
+  rust       Rust stable (rustup)
+  tldr       tldr pages
+  zsh        zsh plugins (antidote)
+  tmux       tmux plugins (tpm)
+  nvim       Neovim: lazy.nvim plugins, then treesitter parsers, then Mason tools
+  texlive    TeX Live through tlmgr on macOS (asks for your password)
+
+  $DOTFILES_CMD update             choose in the checklist
+  $DOTFILES_CMD update nvim zsh    only these steps, no checklist
+  $DOTFILES_CMD update -y          everything, no checklist (also when not in a terminal)
 Commit lazy-lock.json afterwards so every machine uses the same plugins." ;;
     prune) text="List what is installed but no longer managed by the repo:
 Homebrew packages in neither Brewfile (macOS) and mise tool versions no config
@@ -179,6 +191,7 @@ STEPS=()
 MODE=""
 CMD=""          # first command word, for `<command> --help`
 WANT_HELP=0
+UPDATE_STEPS=() # update: the steps named on the command line
 while [[ $# -gt 0 ]]; do
   case $1 in
     install|packages|link|toolchains|docker|fonts|shell|kde|kde-save|doctor|update|prune|check|unlink|clean|backup|backups|restore)
@@ -204,7 +217,12 @@ while [[ $# -gt 0 ]]; do
     -h|--help)                   WANT_HELP=1 ;;
     help)                        if [[ -n ${2:-} && $2 != -* ]]; then command_help "$2"; else usage; fi; exit 0 ;;
     -*) usage_error "unknown option '$1'" ;;
-    *)  usage_error "unknown command '$1'" "$(suggest "$1")" ;;
+    *)  if [[ $CMD == update ]]; then
+          [[ " ${UPDATE_STEP_NAMES[*]} " == *" $1 "* ]] || usage_error "unknown update step '$1'" "$(suggest "$1" "${UPDATE_STEP_NAMES[@]}")"
+          UPDATE_STEPS+=("$1")
+        else
+          usage_error "unknown command '$1'" "$(suggest "$1")"
+        fi ;;
   esac
   shift
 done
